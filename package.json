@@ -1,0 +1,19 @@
+{
+  "name": "gisaima-shared",
+  "version": "1.0.0",
+  "description": "test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lmf-git/gisaima-shared.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lmf-git/gisaima-shared/issues"
+  },
+  "homepage": "https://github.com/lmf-git/gisaima-shared#readme"
+}
