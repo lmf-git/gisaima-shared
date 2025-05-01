@@ -1,4 +1,4 @@
-import UNITS from 'gisaima-shared/definitions/UNITS.js';
+import UNITS from '../definitions/UNITS';
 
 export class Units {
 
