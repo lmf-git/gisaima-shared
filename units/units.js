@@ -1,4 +1,4 @@
-import UNITS from '../definitions/UNITS';
+import UNITS from '../definitions/UNITS.js';
 
 export class Units {
 
