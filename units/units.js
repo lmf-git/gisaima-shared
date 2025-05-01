@@ -1,227 +1,6 @@
-export class Units {
-  /**
-   * Player unit types with their properties
-   * Used for recruitment and battle calculations
-   */
-  static PLAYER_UNITS = {
-    // Basic units
-    'basic_warrior': {
-      name: 'Basic Warrior',
-      description: "Basic melee fighter with sword and shield",
-      type: 'warrior',
-      power: 1,
-      timePerUnit: 60, // seconds
-      icon: 'sword',
-      cost: { wood: 2, stone: 1 },
-      requirements: {
-        structureLevel: 1
-      }
-    },
-    'scout': {
-      name: 'Scout',
-      description: "Fast unit with high visibility",
-      type: 'scout',
-      power: 0.5,
-      timePerUnit: 45,
-      icon: 'bow',
-      cost: { wood: 1, leather: 1 },
-      requirements: {
-        structureLevel: 1
-      }
-    },
-    
-    // Race-specific units
-    'human_knight': {
-      name: 'Knight',
-      description: "Heavily armored warrior with high defense",
-      type: 'knight',
-      power: 2,
-      timePerUnit: 90,
-      icon: 'shield',
-      race: 'human',
-      cost: { wood: 1, stone: 2, iron: 1 },
-      requirements: {
-        structureLevel: 2,
-        race: 'human'
-      }
-    },
-    'elf_archer': {
-      name: 'Elven Archer',
-      description: "Skilled ranged fighter with deadly accuracy",
-      type: 'archer',
-      power: 1.5,
-      timePerUnit: 75,
-      icon: 'bow',
-      race: 'elf',
-      cost: { wood: 3, leather: 1 },
-      requirements: {
-        structureLevel: 2,
-        race: 'elf'
-      }
-    },
-    'dwarf_defender': {
-      name: 'Dwarven Defender',
-      description: "Sturdy warrior specialized in defense",
-      type: 'defender',
-      power: 2,
-      timePerUnit: 90,
-      icon: 'shield',
-      race: 'dwarf',
-      cost: { stone: 2, iron: 2 },
-      requirements: {
-        structureLevel: 2,
-        race: 'dwarf'
-      }
-    },
-    'goblin_raider': {
-      name: 'Goblin Raider',
-      description: "Quick but weak fighter, good in groups",
-      type: 'raider',
-      power: 0.75,
-      timePerUnit: 30,
-      icon: 'sword',
-      race: 'goblin',
-      cost: { wood: 1 },
-      requirements: {
-        structureLevel: 2,
-        race: 'goblin'
-      }
-    },
-    'fairy_enchanter': {
-      name: 'Fairy Enchanter',
-      description: "Magical unit with support abilities",
-      type: 'enchanter',
-      power: 1.5,
-      timePerUnit: 60,
-      icon: 'staff',
-      race: 'fairy',
-      cost: { herbs: 2, crystal: 1 },
-      requirements: {
-        structureLevel: 2,
-        race: 'fairy'
-      }
-    },
-    
-    // Elite units
-    'elite_guard': {
-      name: 'Elite Guard',
-      description: "Highly trained soldier with advanced combat skills",
-      type: 'elite',
-      power: 3,
-      timePerUnit: 120,
-      icon: 'shield',
-      cost: { wood: 2, stone: 2, iron: 2 },
-      requirements: {
-        structureType: ['fortress', 'stronghold'],
-        structureLevel: 2
-      }
-    },
-    'siege_ram': {
-      name: 'Battering Ram',
-      description: "Siege unit effective against structures",
-      type: 'siege',
-      power: 1.5,
-      timePerUnit: 180,
-      icon: 'shield',
-      cost: { wood: 5, stone: 3, iron: 2 },
-      requirements: {
-        structureType: ['fortress', 'stronghold'],
-        structureLevel: 3,
-        research: 'siegecraft'
-      }
-    }
-  };
+import UNITS from 'gisaima-shared/definitions/UNITS.js';
 
-  /**
-   * Monster unit types with their properties
-   * Used for monster spawning, merging, and battles
-   */
-  static MONSTER_UNITS = {
-    goblin: { 
-      probability: 0.3,
-      name: "Goblin Raiders",
-      description: "Small, crafty creatures that attack in groups",
-      unitCountRange: [1, 4],
-      itemChance: 0.6,
-      mergeLimit: 8,
-      power: 0.7,
-      speed: 1.2,
-      possibleItems: ['Wooden Sticks', 'Stolen Goods', 'Crude Weapon'],
-      biomePreference: ['plains', 'forest']
-    },
-    wolf: { 
-      probability: 0.2,
-      name: "Wild Wolves",
-      description: "Fast predators that hunt in packs",
-      unitCountRange: [2, 5],
-      itemChance: 0.4,
-      mergeLimit: 10,
-      power: 1.2,
-      speed: 1.5,
-      possibleItems: ['Wolf Meat', 'Wolf Pelt', 'Wolf Fang'],
-      biomePreference: ['forest', 'tundra']
-    },
-    bandit: { 
-      probability: 0.15,
-      name: "Bandits",
-      description: "Outlaw humans that prey on travelers",
-      unitCountRange: [2, 4],
-      itemChance: 0.8,
-      mergeLimit: 6,
-      power: 1.0,
-      speed: 1.0,
-      possibleItems: ['Ancient Coin', 'Crude Weapon', 'Leather Scraps'],
-      biomePreference: ['plains', 'forest']
-    },
-    spider: { 
-      probability: 0.15,
-      name: "Giant Spiders",
-      description: "Venomous arachnids that spin webs and hunt prey",
-      unitCountRange: [1, 6],
-      itemChance: 0.5,
-      mergeLimit: 12,
-      power: 0.9,
-      speed: 1.2,
-      possibleItems: ['Spider Silk', 'Venom Sac', 'Spider Eye'],
-      biomePreference: ['forest', 'swamp']
-    },
-    skeleton: { 
-      probability: 0.1,
-      name: "Undead Skeletons",
-      description: "Animated remains of fallen warriors",
-      unitCountRange: [3, 7],
-      itemChance: 0.7,
-      mergeLimit: 15,
-      power: 0.8,
-      speed: 0.9,
-      possibleItems: ['Bone Dust', 'Ancient Blade', 'Soul Essence'],
-      biomePreference: ['desert', 'mountain', 'ruins']
-    },
-    troll: { 
-      probability: 0.05,
-      name: "Mountain Troll",
-      description: "Massive, brutish creatures with regenerative abilities",
-      unitCountRange: [1, 2],
-      itemChance: 0.9,
-      mergeLimit: 3,
-      power: 2.5,
-      speed: 0.7,
-      possibleItems: ['Troll Hide', 'Troll Club', 'Troll Tooth'],
-      biomePreference: ['mountain', 'hills']
-    },
-    elemental: { 
-      probability: 0.05,
-      name: "Wild Elemental",
-      description: "Magical manifestations of natural forces",
-      unitCountRange: [1, 3],
-      itemChance: 0.8,
-      mergeLimit: 5,
-      power: 2.0,
-      speed: 1.0,
-      possibleItems: ['Elemental Essence', 'Shiny Gem', 'Magical Residue'],
-      biomePreference: ['tundra', 'desert', 'swamp']
-    }
-  };
+export class Units {
 
   /**
    * Biome-specific monster preferences
@@ -265,90 +44,105 @@ export class Units {
   };
 
   /**
-   * Get a player unit by its ID
+   * Get a unit by its ID
    * @param {string} unitId - ID of the unit
+   * @param {string} [category] - Optional filter by category ('player' or 'monster')
    * @returns {object|null} Unit data or null if not found
    */
-  static getPlayerUnit(unitId) {
-    return Units.PLAYER_UNITS[unitId] || null;
+  static getUnit(unitId, category = null) {
+    const unit = UNITS[unitId];
+    
+    if (!unit) return null;
+    if (category && unit.category !== category) return null;
+    
+    return unit;
   }
 
   /**
-   * Get a monster unit by its type
-   * @param {string} monsterType - Type of monster
-   * @returns {object|null} Monster data or null if not found
-   */
-  static getMonsterUnit(monsterType) {
-    return Units.MONSTER_UNITS[monsterType] || null;
-  }
-
-  /**
-   * Calculate a monster's combat power based on type and count
-   * @param {string} monsterType - Type of monster
-   * @param {number} unitCount - Number of monster units
-   * @param {boolean} isMixed - Whether this is a mixed monster group
-   * @param {number} mergeCount - How many times the monster has merged
+   * Calculate a unit's combat power based on unit ID and count
+   * @param {string} unitId - ID of the unit
+   * @param {number} unitCount - Number of units
+   * @param {object} options - Additional options (isMixed, mergeCount, modifiers)
    * @returns {number} Total combat power
    */
-  static calculateMonsterPower(monsterType, unitCount = 1, isMixed = false, mergeCount = 0) {
-    const monster = Units.getMonsterUnit(monsterType);
-    if (!monster) return unitCount; // Default 1 power per unit
+  static calculateUnitPower(unitId, unitCount = 1, options = {}) {
+    const unit = Units.getUnit(unitId);
+    if (!unit) return unitCount; // Default 1 power per unit
     
     // Base power calculation
-    let basePower = monster.power * unitCount;
+    let basePower = unit.power * unitCount;
     
-    // Apply merge bonus
-    const mergeBonus = mergeCount ? (mergeCount * 0.2) : 0;
-    basePower *= (1 + mergeBonus);
-    
-    // Mixed monsters get a synergy bonus
-    if (isMixed) {
-      basePower *= 1.15;  // 15% bonus for mixed groups
+    if (unit.category === 'monster') {
+      // Apply monster-specific bonuses
+      if (options.mergeCount) {
+        const mergeBonus = options.mergeCount * 0.2;
+        basePower *= (1 + mergeBonus);
+      }
+      
+      if (options.isMixed) {
+        basePower *= 1.15;  // 15% bonus for mixed groups
+      }
+    } else {
+      // Apply player unit bonuses
+      if (options.modifiers) {
+        if (options.modifiers.equipment) basePower *= (1 + options.modifiers.equipment * 0.1);
+        if (options.modifiers.training) basePower *= (1 + options.modifiers.training * 0.15);
+        if (options.modifiers.leadership) basePower *= (1 + options.modifiers.leadership * 0.2);
+      }
     }
     
     return Math.round(basePower * 10) / 10; // Round to 1 decimal place
   }
-
+  
   /**
-   * Calculate a player unit's combat power
-   * @param {string} unitType - Type of unit
-   * @param {number} quantity - Number of units
-   * @param {object} modifiers - Additional modifiers (equipment, etc.)
-   * @returns {number} Total combat power
+   * For backward compatibility
+   * @deprecated Use calculateUnitPower instead
    */
-  static calculatePlayerUnitPower(unitType, quantity = 1, modifiers = {}) {
-    const unit = Units.getPlayerUnit(unitType);
-    if (!unit) return quantity; // Default 1 power per unit
-    
-    // Base power calculation
-    let basePower = unit.power * quantity;
-    
-    // Apply equipment/training modifiers if present
-    if (modifiers.equipment) basePower *= (1 + modifiers.equipment * 0.1);
-    if (modifiers.training) basePower *= (1 + modifiers.training * 0.15);
-    if (modifiers.leadership) basePower *= (1 + modifiers.leadership * 0.2);
-    
-    return Math.round(basePower * 10) / 10; // Round to 1 decimal place
+  static calculateMonsterPower(monsterType, unitCount = 1, isMixed = false, mergeCount = 0) {
+    return Units.calculateUnitPower(monsterType, unitCount, { isMixed, mergeCount });
   }
 
   /**
-   * Generate random monster items based on monster type and unit count
-   * @param {string} monsterType - Type of monster
-   * @param {number} unitCount - Number of monster units
+   * For backward compatibility
+   * @deprecated Use calculateUnitPower instead
+   */
+  static calculatePlayerUnitPower(unitType, quantity = 1, modifiers = {}) {
+    return Units.calculateUnitPower(unitType, quantity, { modifiers });
+  }
+
+  /**
+   * Generate items based on unit ID and count
+   * @param {string} unitId - ID of the unit
+   * @param {number} unitCount - Number of units
    * @returns {Array} Array of generated items
    */
-  static generateMonsterItems(monsterType, unitCount = 1) {
-    const monster = Units.getMonsterUnit(monsterType);
+  static generateItems(unitId, unitCount = 1) {
+    const unit = Units.getUnit(unitId);
+    if (!unit) return [];
+    
+    // Currently only monsters generate items
+    if (unit.category === 'monster') {
+      return Units.generateMonsterItemsInternal(unitId, unitCount);
+    }
+    
+    // Could implement player item generation here
+    return [];
+  }
+
+  /**
+   * Internal method for monster item generation
+   * @private
+   */
+  static generateMonsterItemsInternal(monsterId, unitCount = 1) {
+    const monster = Units.getUnit(monsterId, 'monster');
     if (!monster) return [];
     
     const items = [];
-    // Calculate how many items to generate (more units = more items)
     const itemCount = Math.min(Math.ceil(unitCount / 2), 3);
     
     for (let i = 0; i < itemCount; i++) {
-      // Only add item if we pass the chance check
       if (Math.random() < monster.itemChance) {
-        // Determine rarity with weighted probabilities
+        // Determine rarity and generate items as before
         const rarityRoll = Math.random();
         let rarity;
         
@@ -385,43 +179,47 @@ export class Units {
     
     return items;
   }
-
+  
   /**
-   * Choose a monster type appropriate for a biome
-   * @param {string} biome - Biome type
-   * @returns {string} Selected monster type
+   * For backward compatibility
+   * @deprecated Use generateItems instead
    */
-  static chooseMonsterTypeForBiome(biome = 'default') {
-    const weights = Units.BIOME_MONSTER_WEIGHTS[biome] || Units.BIOME_MONSTER_WEIGHTS.default;
-    
-    // Convert weights to a probability distribution
-    const distribution = [];
-    for (const [monsterType, weight] of Object.entries(weights)) {
-      if (monsterType === 'other') continue;
-      
-      // Add entries to distribution based on weight
-      for (let i = 0; i < weight * 100; i++) {
-        distribution.push(monsterType);
-      }
-    }
-    
-    // If distribution is somehow empty, use fallbacks
-    if (distribution.length === 0) {
-      return Object.keys(Units.MONSTER_UNITS)[0];
-    }
-    
-    // Pick randomly from distribution
-    return distribution[Math.floor(Math.random() * distribution.length)];
+  static generateMonsterItems(monsterType, unitCount = 1) {
+    return Units.generateItems(monsterType, unitCount);
   }
 
   /**
-   * Get appropriate monster name based on type and count
-   * @param {string} monsterType - Type of monster
+   * Get appropriate group name based on unit ID and count
+   * @param {string} unitId - ID of the unit
    * @param {number} unitCount - Number of units
-   * @returns {string} Descriptive monster group name
+   * @param {object} options - Additional options for mixed groups
+   * @returns {string} Descriptive unit group name
    */
-  static getMonsterGroupName(monsterType, unitCount) {
-    const monster = Units.getMonsterUnit(monsterType);
+  static getUnitGroupName(unitId, unitCount, options = {}) {
+    const unit = Units.getUnit(unitId);
+    if (!unit) return 'Unknown Group';
+    
+    if (unit.category === 'monster') {
+      if (options.composition) {
+        return Units.getMixedMonsterGroupName(options.composition, unitCount);
+      }
+      return Units.getMonsterGroupNameInternal(unitId, unitCount);
+    }
+    
+    // Player unit group naming
+    if (unitCount <= 1) {
+      return unit.name;
+    } else {
+      return `${unit.name} Group (${unitCount})`;
+    }
+  }
+
+  /**
+   * Internal method for monster group naming
+   * @private
+   */
+  static getMonsterGroupNameInternal(monsterId, unitCount) {
+    const monster = Units.getUnit(monsterId, 'monster');
     if (!monster) return 'Monster Group';
     
     const baseName = monster.name;
@@ -440,6 +238,50 @@ export class Units {
     }
   }
 
+  /**
+   * For backward compatibility
+   * @deprecated Use getUnitGroupName instead
+   */
+  static getMonsterGroupName(monsterType, unitCount) {
+    return Units.getUnitGroupName(monsterType, unitCount);
+  }
+
+  /**
+   * Choose an appropriate monster unit for a biome
+   * @param {string} biome - Biome name
+   * @returns {string} Chosen unit ID
+   */
+  static chooseMonsterTypeForBiome(biome = 'default') {
+    const weights = Units.BIOME_MONSTER_WEIGHTS[biome] || Units.BIOME_MONSTER_WEIGHTS.default;
+    
+    // Filter for units in our unified system
+    const monsterUnits = Object.keys(UNITS).filter(id => 
+      UNITS[id].category === 'monster' && weights[id]
+    );
+    
+    if (monsterUnits.length === 0) {
+      // Fallback to any monster unit
+      const anyMonsterUnits = Object.keys(UNITS).filter(id => 
+        UNITS[id].category === 'monster'
+      );
+      return anyMonsterUnits[Math.floor(Math.random() * anyMonsterUnits.length)];
+    }
+    
+    // Build weighted distribution
+    const distribution = [];
+    for (const unitId of monsterUnits) {
+      const weight = weights[unitId] || 0.1; // Default to 0.1 weight if not specified
+      
+      // Add entries to distribution based on weight
+      for (let i = 0; i < weight * 100; i++) {
+        distribution.push(unitId);
+      }
+    }
+    
+    // Pick randomly from distribution
+    return distribution[Math.floor(Math.random() * distribution.length)];
+  }
+  
   /**
    * Generate a name for a mixed monster group
    * @param {Object} composition - Composition of monster types
@@ -482,20 +324,12 @@ export class Units {
     } else {
       // Get display names for the top types
       const typeNames = sortedTypes.slice(0, 2).map(type => {
-        const monster = Units.getMonsterUnit(type);
+        const monster = Units.getUnit(type, 'monster');
         return monster ? monster.name.split(' ')[0] : Units.capitalizeFirstLetter(type);
       });
       
       return `${prefix} ${typeNames.join('-')} ${suffix}`.trim();
     }
-  }
-  
-  /**
-   * Helper function to capitalize first letter
-   * @private
-   */
-  static capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
   }
   
   /**
@@ -509,11 +343,13 @@ export class Units {
     const race = structure?.race?.toLowerCase();
     const structureLevel = structure?.level || 1;
     
-    // Get all player units
-    const allUnits = Object.entries(Units.PLAYER_UNITS).map(([id, data]) => ({
-      id,
-      ...data
-    }));
+    // Get all player units from unified UNITS collection
+    const allUnits = Object.entries(UNITS)
+      .filter(([_, data]) => data.category === 'player')
+      .map(([id, data]) => ({
+        id,
+        ...data
+      }));
     
     // Process each unit to determine availability
     return allUnits.map(unit => {
@@ -578,5 +414,13 @@ export class Units {
   static formatResearchName(research) {
     if (!research) return "";
     return research.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  }
+  
+  /**
+   * Helper function to capitalize first letter
+   * @private
+   */
+  static capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 }
