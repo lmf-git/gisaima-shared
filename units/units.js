@@ -31,21 +31,6 @@ export class Units {
     
     return unit;
   }
-
-  /**
-   * Calculate a unit's combat power based on unit ID and count
-   * @param {string} unitId - ID of the unit
-   * @param {number} qty - Number of units
-   * @returns {number} Total combat power
-   */
-  static calculateUnitPower(unitId, qty = 1) {
-    const unit = Units.getUnit(unitId);
-    if (!unit) return qty; // Default 1 power per unit
-    
-    // Base power calculation
-    let basePower = unit.power * qty;
-    return Math.round(basePower * 10) / 10; // Round to 1 decimal place
-  }
   
 
   /**
@@ -123,70 +108,6 @@ export class Units {
     }
     
     return items;
-  }
-
-  /**
-   * Get appropriate group name based on unit ID and count
-   * @param {string} unitId - ID of the unit
-   * @param {number} unitQty - Number of units
-   * @param {object} options - Additional options for mixed groups
-   * @returns {string} Descriptive unit group name
-   */
-  static getUnitGroupName(unitId, unitQty) {
-    const unit = Units.getUnit(unitId);
-    if (!unit) return 'Unknown Group';
-    
-    if (unit.category === 'monster') {
-      return Units.getMonsterGroupNameInternal(unitId, unitQty);
-    }
-    
-    // Player unit group naming
-    if (unitQty <= 1) {
-      return unit.name;
-    } else {
-      return `${unit.name} Group (${unitQty})`;
-    }
-  }
-
-  /**
-   * Internal method for monster group naming
-   * @private
-   */
-  static getMonsterGroupNameInternal(monsterId, unitQty) {
-    const monster = Units.getUnit(monsterId, 'monster');
-    if (!monster) {
-      // If monster definition not found, create a fallback name from the monsterId
-      const fallbackName = monsterId ? 
-        monsterId.charAt(0).toUpperCase() + monsterId.slice(1) + ' Creatures' : 
-        'Monster Group';
-      
-      return unitQty <= 3 ? `Small ${fallbackName}` : 
-             unitQty <= 8 ? fallbackName : 
-             `Large ${fallbackName}`;
-    }
-    
-    // Get the base name without redundant size descriptors
-    let baseName = monster.name;
-    // Remove size-related words if they already exist in the name
-    const sizeWords = ['Small', 'Large', 'Massive', 'Giant'];
-    for (const word of sizeWords) {
-      if (baseName.startsWith(word + ' ')) {
-        baseName = baseName.substring(word.length + 1);
-      }
-    }
-    
-    // Different names based on size
-    if (unitQty <= 3) {
-      return `Small ${baseName}`;
-    } else if (unitQty <= 5) {
-      return baseName;
-    } else if (unitQty <= 8) {
-      return `${baseName} Warband`;
-    } else if (unitQty <= 12) {
-      return `${baseName} Horde`;
-    } else {
-      return `Massive ${baseName} Legion`;
-    }
   }
 
   /**
