@@ -11,7 +11,8 @@ export const STRUCTURES = {
     },
     buildTime: 1,
     capacity: 10,
-    features: ['basic_storage', 'monster_spawning']
+    features: ['basic_storage', 'monster_spawning'],
+    monster: true
   },
   'monster_fortress': {
     name: "Monster Fortress",
@@ -22,7 +23,8 @@ export const STRUCTURES = {
     },
     buildTime: 2,
     capacity: 25,
-    features: ['advanced_storage', 'monster_defense', 'monster_spawning']
+    features: ['advanced_storage', 'monster_defense', 'monster_spawning'],
+    monster: true
   },
   'monster_hive': {
     name: "Monster Hive",
@@ -33,7 +35,8 @@ export const STRUCTURES = {
     },
     buildTime: 1,
     capacity: 15,
-    features: ['monster_spawning', 'rapid_growth']
+    features: ['monster_spawning', 'rapid_growth'],
+    monster: true
   },
   'basic_shelter': {
     name: 'Basic Shelter',
