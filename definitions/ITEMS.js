@@ -1,0 +1,294 @@
+export const ITEMS = {
+  // Common resources (gathered items)
+  WOODEN_STICKS: {
+    name: 'Wooden Sticks',
+    type: 'resource',
+    rarity: 'common',
+    description: 'Basic building material found in most areas',
+    biomes: ['plains', 'forest', 'mountains', 'desert', 'rivers', 'oasis', 'ruins', 'wastes']
+  },
+  STONE_PIECES: {
+    name: 'Stone Pieces',
+    type: 'resource',
+    rarity: 'common',
+    description: 'Small rocks useful for crafting tools',
+    biomes: ['plains', 'forest', 'mountains', 'desert', 'ruins', 'wastes']
+  },
+  
+  // Craftable items
+  WOODEN_SWORD: {
+    name: 'Wooden Sword',
+    type: 'weapon',
+    rarity: 'common',
+    description: 'A basic wooden sword. Not very durable but better than nothing.',
+    recipe: {
+      materials: {
+        WOODEN_STICKS: 5
+      },
+      ticksRequired: 6,
+      category: 'weapon',
+      requiredLevel: 1
+    }
+  },
+  
+  STONE_SWORD: {
+    name: 'Stone Sword',
+    type: 'weapon',
+    rarity: 'common',
+    description: 'A stone-bladed sword. More durable than wood.',
+    recipe: {
+      materials: {
+        WOODEN_STICKS: 2,
+        STONE_PIECES: 5
+      },
+      ticksRequired: 12,
+      category: 'weapon',
+      requiredLevel: 2
+    }
+  },
+  
+  IRON_SWORD: {
+    name: 'Iron Sword',
+    type: 'weapon',
+    rarity: 'uncommon',
+    description: 'A well-crafted iron sword. Standard issue for many fighters.',
+    recipe: {
+      materials: {
+        WOODEN_STICKS: 2,
+        IRON_ORE: 3
+      },
+      ticksRequired: 18,
+      category: 'weapon',
+      requiredLevel: 3,
+      requiredBuilding: {
+        type: 'smithy',
+        level: 2
+      }
+    }
+  },
+  
+  HERBAL_TEA: {
+    name: 'Herbal Tea',
+    type: 'consumable',
+    rarity: 'common',
+    description: 'A soothing tea that provides minor healing and stamina recovery.',
+    recipe: {
+      materials: {
+        MEDICINAL_HERBS: 2,
+        FRESH_WATER: 1
+      },
+      ticksRequired: 4,
+      category: 'consumable',
+      requiredLevel: 1,
+      requiredBuilding: {
+        type: 'farm',
+        level: 1
+      },
+      quantity: 2  // Produces 2 per craft
+    }
+  },
+  
+  // Special items
+  MYSTERIOUS_ARTIFACT: {
+    name: 'Mysterious Artifact',
+    type: 'artifact',
+    rarity: 'rare',
+    description: 'A strange object of unknown origin',
+    biomes: ['ruins', 'wastes'] // Special item found in specific areas
+  },
+  
+  // Plains items
+  WHEAT: {
+    name: 'Wheat',
+    type: 'resource',
+    rarity: 'common',
+    description: 'Grain that grows in open grasslands',
+    biomes: ['plains']
+  },
+  WILD_BERRIES: {
+    name: 'Wild Berries',
+    type: 'resource',
+    rarity: 'common',
+    description: 'Edible berries found in meadows',
+    biomes: ['plains', 'forest']
+  },
+  
+  // Forest items
+  OAK_WOOD: {
+    name: 'Oak Wood',
+    type: 'resource',
+    rarity: 'common',
+    description: 'Strong wood from forest trees',
+    biomes: ['forest']
+  },
+  MEDICINAL_HERBS: {
+    name: 'Medicinal Herbs',
+    type: 'resource',
+    rarity: 'uncommon',
+    description: 'Plants with healing properties',
+    biomes: ['forest']
+  },
+  
+  // Mountain items
+  IRON_ORE: {
+    name: 'Iron Ore',
+    type: 'resource',
+    rarity: 'uncommon',
+    description: 'Metal-bearing rock found in mountains',
+    biomes: ['mountains']
+  },
+  MOUNTAIN_CRYSTAL: {
+    name: 'Mountain Crystal',
+    type: 'gem',
+    rarity: 'rare',
+    description: 'Beautiful crystal formed deep within mountains',
+    biomes: ['mountains']
+  },
+  
+  // Desert items
+  SAND_CRYSTAL: {
+    name: 'Sand Crystal',
+    type: 'gem',
+    rarity: 'uncommon',
+    description: 'Formed from heated desert sands',
+    biomes: ['desert']
+  },
+  CACTUS_FRUIT: {
+    name: 'Cactus Fruit',
+    type: 'resource',
+    rarity: 'common',
+    description: 'Juicy fruit that grows on desert cacti',
+    biomes: ['desert']
+  },
+  
+  // River items
+  FRESH_WATER: {
+    name: 'Fresh Water',
+    type: 'resource',
+    rarity: 'common',
+    description: 'Clean water from flowing rivers',
+    biomes: ['rivers']
+  },
+  FISH: {
+    name: 'Fish',
+    type: 'resource',
+    rarity: 'common',
+    description: 'Freshwater fish from rivers and lakes',
+    biomes: ['rivers']
+  },
+  
+  // Oasis items
+  PURE_WATER: {
+    name: 'Pure Water',
+    type: 'resource',
+    rarity: 'uncommon',
+    description: 'Exceptionally clean water from oasis springs',
+    biomes: ['oasis']
+  },
+  EXOTIC_FRUIT: {
+    name: 'Exotic Fruit',
+    type: 'resource',
+    rarity: 'uncommon',
+    description: 'Rare fruits growing around water sources in dry areas',
+    biomes: ['oasis']
+  },
+  
+  // Ruins items
+  ANCIENT_FRAGMENT: {
+    name: 'Ancient Fragment',
+    type: 'artifact',
+    rarity: 'rare',
+    description: 'Piece of a forgotten civilization',
+    biomes: ['ruins']
+  },
+  BROKEN_TOOL: {
+    name: 'Broken Tool',
+    type: 'junk',
+    rarity: 'common',
+    description: 'Damaged tool from a bygone era',
+    biomes: ['ruins']
+  },
+  
+  // Wasteland items
+  SCRAP_METAL: {
+    name: 'Scrap Metal',
+    type: 'resource',
+    rarity: 'common',
+    description: 'Salvageable metal pieces',
+    biomes: ['wastes']
+  },
+  STRANGE_DEVICE: {
+    name: 'Strange Device',
+    type: 'artifact',
+    rarity: 'uncommon',
+    description: 'Peculiar machinery with unknown purpose',
+    biomes: ['wastes']
+  }
+};
+
+// Helper function to get all craftable recipes
+export function getAllRecipes() {
+  return Object.entries(ITEMS)
+    .filter(([_, item]) => item.recipe)
+    .map(([itemId, item]) => ({
+      id: itemId.toLowerCase(),  // lowercase ID for recipe reference
+      name: item.name,
+      category: item.recipe.category,
+      materials: item.recipe.materials,
+      result: {
+        id: itemId,
+        ...item,
+        quantity: item.recipe.quantity || 1
+      },
+      ticksRequired: item.recipe.ticksRequired,
+      requiredLevel: item.recipe.requiredLevel,
+      requiredBuilding: item.recipe.requiredBuilding
+    }));
+}
+
+// Helper to get recipes by category
+export function getRecipesByCategory(category) {
+  return getAllRecipes().filter(recipe => recipe.category === category);
+}
+
+// Helper to find a recipe by ID
+export function getRecipeById(recipeId) {
+  return getAllRecipes().find(recipe => recipe.id === recipeId);
+}
+
+// Helper to check if player can craft a recipe
+export function canCraftRecipe(recipeId, inventory, buildingLevels = {}) {
+  const recipe = getRecipeById(recipeId);
+  if (!recipe) return false;
+  
+  // Check materials
+  const hasMaterials = Object.entries(recipe.materials).every(([itemId, requiredQty]) => {
+    const item = inventory.find(invItem => invItem.id === itemId);
+    return item && item.quantity >= requiredQty;
+  });
+  
+  // Check building requirements
+  const meetsBuilding = !recipe.requiredBuilding || 
+    (buildingLevels[recipe.requiredBuilding.type] >= recipe.requiredBuilding.level);
+  
+  return hasMaterials && meetsBuilding;
+}
+
+// Retain the biome item function
+export function getBiomeItems(biomeName) {
+  // Default to plains if biome not found
+  const validBiome = ['plains', 'forest', 'mountains', 'desert', 'rivers', 'oasis', 'ruins', 'wastes'].includes(biomeName) 
+    ? biomeName 
+    : 'plains';
+  
+  // Filter items that belong to this biome
+  const biomeItems = Object.entries(ITEMS)
+    .filter(([_, item]) => item.biomes && item.biomes.includes(validBiome))
+    .map(([id, item]) => ({
+      id,
+      ...item,
+      quantity: Math.floor(Math.random() * (item.rarity === 'common' ? 3 : 2)) + 1
+    }));
+  
+  return biomeItems;
+}
