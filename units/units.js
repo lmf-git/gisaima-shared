@@ -1,4 +1,5 @@
 import UNITS from '../definitions/UNITS.js';
+import { MONSTER_DROPS, ITEMS } from '../definitions/items.js';
 
 export class Units {
 
@@ -14,33 +15,6 @@ export class Units {
     tundra: { wolf: 0.4, elemental: 0.3, skeleton: 0.2, other: 0.1 },
     ruins: { skeleton: 0.5, goblin: 0.2, bandit: 0.2, other: 0.1 },
     default: { goblin: 0.25, wolf: 0.25, bandit: 0.2, spider: 0.2, other: 0.1 }
-  };
-
-  /**
-   * Item drops for monsters
-   */
-  static MONSTER_ITEMS = {
-    common: [
-      { name: "Wooden Sticks", type: "resource", quantityRange: [1, 5] },
-      { name: "Stone Pieces", type: "resource", quantityRange: [1, 4] },
-      { name: "Bone Fragment", type: "resource", quantityRange: [1, 3] },
-      { name: "Crude Weapon", type: "weapon", quantityRange: [1, 1] }
-    ],
-    uncommon: [
-      { name: "Monster Hide", type: "resource", quantityRange: [1, 2] },
-      { name: "Ancient Coin", type: "treasure", quantityRange: [1, 3] },
-      { name: "Monster Tooth", type: "trophy", quantityRange: [1, 2] },
-      { name: "Mysterious Herb", type: "alchemy", quantityRange: [1, 2] }
-    ],
-    rare: [
-      { name: "Shiny Gem", type: "gem", quantityRange: [1, 1] },
-      { name: "Monster Blood", type: "alchemy", quantityRange: [1, 2] },
-      { name: "Rare Metals", type: "resource", quantityRange: [1, 2] }
-    ],
-    epic: [
-      { name: "Primal Essence", type: "gem", quantityRange: [1, 1] },
-      { name: "Legendary Fragment", type: "treasure", quantityRange: [1, 1] }
-    ]
   };
 
   /**
@@ -127,7 +101,7 @@ export class Units {
     
     for (let i = 0; i < itemCount; i++) {
       if (Math.random() < monster.itemChance) {
-        // Determine rarity and generate items as before
+        // Determine rarity tier
         const rarityRoll = Math.random();
         let rarity;
         
@@ -141,10 +115,17 @@ export class Units {
           rarity = 'common';
         }
         
-        // Get items for that rarity
-        const possibleItems = Units.MONSTER_ITEMS[rarity];
+        // Get items for that rarity from shared MONSTER_DROPS
+        const possibleItems = MONSTER_DROPS[rarity];
         if (possibleItems && possibleItems.length > 0) {
           const itemTemplate = possibleItems[Math.floor(Math.random() * possibleItems.length)];
+          
+          // Get the item definition from the shared ITEMS
+          const itemDefinition = ITEMS[itemTemplate.id] || {
+            name: itemTemplate.id,
+            type: 'unknown',
+            rarity: rarity
+          };
           
           // Generate quantity within range
           const minQty = itemTemplate.quantityRange[0];
@@ -152,10 +133,10 @@ export class Units {
           const quantity = Math.floor(Math.random() * (maxQty - minQty + 1)) + minQty;
           
           items.push({
-            id: `item_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
-            name: itemTemplate.name,
-            type: itemTemplate.type,
-            rarity,
+            id: itemTemplate.id,
+            name: itemDefinition.name,
+            type: itemDefinition.type,
+            rarity: itemDefinition.rarity,
             quantity
           });
         }

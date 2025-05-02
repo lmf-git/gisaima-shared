@@ -240,7 +240,90 @@ export const ITEMS = {
     rarity: 'uncommon',
     description: 'Peculiar machinery with unknown purpose',
     biomes: ['wastes']
+  },
+
+  // New monster drop items
+  BONE_FRAGMENT: {
+    name: 'Bone Fragment',
+    type: 'resource',
+    rarity: 'common',
+    description: 'A fragment of bone from a defeated monster',
+    monsterDrop: true
+  },
+  CRUDE_WEAPON: {
+    name: 'Crude Weapon',
+    type: 'weapon',
+    rarity: 'common',
+    description: 'A simple weapon dropped by a monster',
+    monsterDrop: true
+  },
+  MONSTER_HIDE: {
+    name: 'Monster Hide',
+    type: 'resource',
+    rarity: 'uncommon',
+    description: 'Tough hide from a monster',
+    monsterDrop: true
+  },
+  ANCIENT_COIN: {
+    name: 'Ancient Coin',
+    type: 'treasure',
+    rarity: 'uncommon',
+    description: 'Old coin from a forgotten civilization',
+    monsterDrop: true
+  },
+  MONSTER_TOOTH: {
+    name: 'Monster Tooth',
+    type: 'trophy',
+    rarity: 'uncommon',
+    description: 'Sharp tooth taken from a slain creature',
+    monsterDrop: true
+  },
+  MONSTER_BLOOD: {
+    name: 'Monster Blood',
+    type: 'alchemy',
+    rarity: 'rare',
+    description: 'Unusual blood with magical properties',
+    monsterDrop: true
+  },
+  RARE_METALS: {
+    name: 'Rare Metals',
+    type: 'resource',
+    rarity: 'rare',
+    description: 'Uncommon metal fragments with special properties',
+    monsterDrop: true
+  },
+  PRIMAL_ESSENCE: {
+    name: 'Primal Essence',
+    type: 'gem',
+    rarity: 'epic',
+    description: 'Crystallized magical energy from a powerful creature',
+    monsterDrop: true
   }
+};
+
+// Monster drop items organized by rarity tiers
+export const MONSTER_DROPS = {
+  common: [
+    { id: "WOODEN_STICKS", quantityRange: [1, 5] },
+    { id: "STONE_PIECES", quantityRange: [1, 4] },
+    { id: "BONE_FRAGMENT", quantityRange: [1, 3] },
+    { id: "CRUDE_WEAPON", quantityRange: [1, 1] }
+  ],
+  uncommon: [
+    { id: "MONSTER_HIDE", quantityRange: [1, 2] },
+    { id: "ANCIENT_COIN", quantityRange: [1, 3] },
+    { id: "MONSTER_TOOTH", quantityRange: [1, 2] },
+    { id: "MEDICINAL_HERBS", quantityRange: [1, 2] }  // Reuse existing item
+  ],
+  rare: [
+    { id: "MOUNTAIN_CRYSTAL", quantityRange: [1, 1] }, // Reuse existing gem
+    { id: "MONSTER_BLOOD", quantityRange: [1, 2] },
+    { id: "RARE_METALS", quantityRange: [1, 2] }
+  ],
+  epic: [
+    { id: "PRIMAL_ESSENCE", quantityRange: [1, 1] },
+    { id: "ANCIENT_FRAGMENT", quantityRange: [1, 1] }  // Reuse existing artifact
+  ]
 };
 
 // Helper function to get all craftable recipes
