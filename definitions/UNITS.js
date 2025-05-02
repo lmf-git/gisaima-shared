@@ -21,6 +21,10 @@ const UNITS = {
         cost: { wood: 2, stone: 1 },
         requirements: {
             structureLevel: 1
+        },
+        recruitment: {
+            sortOrder: 10,
+            tooltip: "Basic frontline fighter"
         }
     },
     'scout': {
@@ -34,6 +38,10 @@ const UNITS = {
         cost: { wood: 1, leather: 1 },
         requirements: {
             structureLevel: 1
+        },
+        recruitment: {
+            sortOrder: 20,
+            tooltip: "Good for exploration"
         }
     },
 
@@ -50,7 +58,15 @@ const UNITS = {
         cost: { wood: 1, stone: 2, iron: 1 },
         requirements: {
             structureLevel: 2,
-            race: 'human'
+            race: 'human',
+            structureType: ['basic_shelter', 'workshop'], // Now requires specific structure types
+            buildingType: 'smithy',     // Requires a smithy building
+            buildingLevel: 2            // Smithy must be at least level 2
+        },
+        recruitment: {
+            sortOrder: 100,
+            tooltip: "Strong defensive unit that requires a level 2 smithy",
+            unavailableText: "Requires Human structure with level 2 smithy"
         }
     },
     'elf_archer': {
@@ -65,7 +81,14 @@ const UNITS = {
         cost: { wood: 3, leather: 1 },
         requirements: {
             structureLevel: 2,
-            race: 'elf'
+            race: 'elf',
+            buildingType: 'barracks', // Requires a barracks building
+            buildingLevel: 1          // Barracks must be at least level 1
+        },
+        recruitment: {
+            sortOrder: 110,
+            tooltip: "Excellent ranged attacker, requires a barracks",
+            unavailableText: "Requires Elf structure with barracks"
         }
     },
     'dwarf_defender': {
@@ -80,7 +103,14 @@ const UNITS = {
         cost: { stone: 2, iron: 2 },
         requirements: {
             structureLevel: 2,
-            race: 'dwarf'
+            race: 'dwarf',
+            buildingType: 'wall',  // Requires defensive wall building
+            buildingLevel: 2       // Wall must be at least level 2
+        },
+        recruitment: {
+            sortOrder: 120,
+            tooltip: "High defense, low mobility, requires defensive walls",
+            unavailableText: "Requires Dwarf structure with level 2 defensive wall"
         }
     },
     'goblin_raider': {
@@ -96,6 +126,11 @@ const UNITS = {
         requirements: {
             structureLevel: 2,
             race: 'goblin'
+        },
+        recruitment: {
+            sortOrder: 130,
+            tooltip: "Fast but fragile",
+            unavailableText: "Requires Goblin structure level 2"
         }
     },
     'fairy_enchanter': {
@@ -110,7 +145,15 @@ const UNITS = {
         cost: { herbs: 2, crystal: 1 },
         requirements: {
             structureLevel: 2,
-            race: 'fairy'
+            race: 'fairy',
+            buildingType: 'academy',  // Requires academy building
+            buildingLevel: 1,         // Academy must be at least level 1
+            research: 'basic_research' // Requires basic research to be completed
+        },
+        recruitment: {
+            sortOrder: 140,
+            tooltip: "Support caster with buffs, requires academy research",
+            unavailableText: "Requires Fairy structure with academy and basic research"
         }
     },
 
@@ -125,8 +168,15 @@ const UNITS = {
         icon: 'shield',
         cost: { wood: 2, stone: 2, iron: 2 },
         requirements: {
-            structureType: ['fortress', 'stronghold'],
-            structureLevel: 2
+            structureType: ['fortress', 'stronghold', 'watchtower'], // Added watchtower as valid structure
+            structureLevel: 2,
+            buildingType: 'barracks',  // Requires barracks building
+            buildingLevel: 3           // Barracks must be at least level 3
+        },
+        recruitment: {
+            sortOrder: 200,
+            tooltip: "Premium fighting unit, requires advanced barracks",
+            unavailableText: "Requires fortress/stronghold/watchtower with level 3 barracks"
         }
     },
     'siege_ram': {
@@ -139,9 +189,62 @@ const UNITS = {
         icon: 'shield',
         cost: { wood: 5, stone: 3, iron: 2 },
         requirements: {
-            structureType: ['fortress', 'stronghold'],
+            structureType: ['fortress', 'stronghold', 'workshop'], // Added workshop as valid structure
             structureLevel: 3,
-            research: 'siegecraft'
+            buildingType: 'smithy',    // Requires smithy building
+            buildingLevel: 4,          // Smithy must be at least level 4
+            research: 'siegecraft'     // Requires siegecraft research
+        },
+        recruitment: {
+            sortOrder: 300,
+            tooltip: "Excellent against buildings, requires advanced smithy",
+            unavailableText: "Requires level 3 structure with level 4 smithy and siegecraft research"
+        }
+    },
+
+    // New unit with structure & building requirements
+    'master_craftsman': {
+        name: 'Master Craftsman',
+        description: "Skilled worker who can construct and repair at higher speeds",
+        category: 'player',
+        type: 'worker',
+        power: 1.0,
+        timePerUnit: 120,
+        icon: 'hammer',
+        cost: { wood: 3, stone: 3, iron: 1, tools: 1 },
+        requirements: {
+            structureType: ['workshop', 'storage'], // Requires specific structure types
+            structureLevel: 2,
+            buildingType: 'smithy',    // Requires smithy building
+            buildingLevel: 3           // Smithy must be at least level 3
+        },
+        recruitment: {
+            sortOrder: 250,
+            tooltip: "Boosts construction speed, requires advanced workshop",
+            unavailableText: "Requires workshop/storage with level 3 smithy"
+        }
+    },
+
+    // New unit with resource building requirement
+    'resource_gatherer': {
+        name: 'Expert Gatherer',
+        description: "Specialized unit that gathers resources more efficiently",
+        category: 'player',
+        type: 'gatherer',
+        power: 0.5,
+        timePerUnit: 90,
+        icon: 'pickaxe',
+        cost: { wood: 2, tools: 1 },
+        requirements: {
+            structureType: ['storage'], // Requires storage structure
+            structureLevel: 1,
+            buildingType: 'mine',    // Requires mine building
+            buildingLevel: 2         // Mine must be at least level 2
+        },
+        recruitment: {
+            sortOrder: 150,
+            tooltip: "Gathers resources faster, requires mining operations",
+            unavailableText: "Requires storage structure with level 2 mine"
         }
     },
 
