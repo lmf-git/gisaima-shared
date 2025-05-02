@@ -1,5 +1,5 @@
 import UNITS from '../definitions/UNITS.js';
-import { MONSTER_DROPS, ITEMS } from '../definitions/items.js';
+import { MONSTER_DROPS, ITEMS } from '../definitions/ITEMS.js';
 
 export class Units {
 
