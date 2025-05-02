@@ -33,9 +33,22 @@ export function calculateAttrition(sidePower, powerRatio) {
   // Calculate raw attrition
   let attrition = Math.round(sidePower * baseAttritionRate * (powerRatio + 0.5));
   
-  // Always ensure at least 1 attrition point when there's power
-  // This ensures battles always progress and don't end in draws due to no casualties
-  if (sidePower > 0) {
+  // Power dominance factor - how much stronger this side is compared to opponent
+  // powerRatio near 1.0 means very dominant, near 0 means very weak
+  const powerDominance = Math.max(0, powerRatio * 2 - 0.5); // Scale to 0-1.5 range
+  
+  // Chance of taking zero casualties increases with power dominance
+  // When powerRatio is 0.95+ (extreme dominance), up to 90% chance of no casualties
+  const zeroAttritionChance = Math.min(0.9, powerDominance * 0.95);
+  
+  // Apply chance of zero attrition for dominant forces
+  if (powerRatio > 0.75 && Math.random() < zeroAttritionChance) {
+    attrition = 0;
+    console.log(`Side with ${powerRatio.toFixed(2)} power ratio takes no casualties due to overwhelming advantage`);
+  } 
+  // For weaker sides or when random chance doesn't lead to zero attrition
+  else if (sidePower > 0) {
+    // Ensure minimum attrition of 1 to keep battles progressing
     attrition = Math.max(1, attrition);
   }
   
