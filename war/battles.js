@@ -104,8 +104,18 @@ export function selectUnitsForCasualties(units, attritionCount) {
  * Returns: 0 for draw, 1 for side1 win, 2 for side2 win
  */
 export function determineWinner(side1Power, side2Power) {
-  if (side1Power <= 0 && side2Power <= 0) return 0; // Draw
+  if (side1Power <= 0 && side2Power <= 0) {
+    // Rather than a true draw, pick a side with slight advantage or random if exactly equal
+    if (side1Power > side2Power) return 1;
+    if (side2Power > side1Power) return 2;
+    // If exactly equal at 0, random winner
+    return Math.random() < 0.5 ? 1 : 2;
+  }
+  
   if (side1Power > side2Power) return 1; // Side 1 wins
   if (side2Power > side1Power) return 2; // Side 2 wins
-  return 0; // Default to draw
+  
+  // In case of exact tie with power > 0, use random selection
+  // This is extremely unlikely due to the random factor in power calculation
+  return Math.random() < 0.5 ? 1 : 2;
 }
