@@ -8,7 +8,7 @@ export function calculateGroupPower(group) {
       const unitType = unit.type;
       const unitPower = unitType && UNITS[unitType] ? 
         UNITS[unitType].power : (unit.strength || 1);
-      return total + (unitPower * unit?.quantity || 1);
+      return total + (unitPower || 1);
     }, 0);
     
     // Ensure minimum power of 1 for any group that exists
