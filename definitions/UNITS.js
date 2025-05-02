@@ -10,8 +10,8 @@ const UNITS = {
     },
 
     // Player Units - Basic units
-    'basic_warrior': {
-        name: 'Basic Warrior',
+    'warrior': {
+        name: 'Warrior',
         description: "Basic melee fighter with sword and shield",
         category: 'player',
         type: 'warrior',
@@ -19,9 +19,6 @@ const UNITS = {
         timePerUnit: 60, // seconds
         icon: 'sword',
         cost: { wood: 2, stone: 1 },
-        requirements: {
-            structureLevel: 1
-        },
         recruitment: {
             sortOrder: 10,
             tooltip: "Basic frontline fighter"
