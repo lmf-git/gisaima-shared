@@ -1,4 +1,4 @@
-import UNITS from "../definitions/UNITS,js";
+import UNITS from "../definitions/UNITS.js";
 
 export function calculateGroupPower(group) {
     if (!group) return 0;
