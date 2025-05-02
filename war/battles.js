@@ -47,7 +47,9 @@ export function calculateAttrition(sidePower, powerRatio) {
  * Returns an object with units to remove and players killed
  */
 export function selectUnitsForCasualties(units, attritionCount) {
-  if (!units) return { unitsToRemove: [], playersKilled: [] };
+  if (!units || attritionCount <= 0) {
+    return { unitsToRemove: [], playersKilled: [] };
+  }
   
   const unitIds = Object.keys(units);
   const totalUnits = unitIds.length;
@@ -55,7 +57,22 @@ export function selectUnitsForCasualties(units, attritionCount) {
   const unitsToRemove = [];
   const playersKilled = [];
   
-  // First remove regular (non-player) units
+  // Check if there's only one unit and it's a player - no special protection in this case
+  // But still respect the attrition count - only kill if attrition > 0
+  if (totalUnits === 1 && units[unitIds[0]].type === 'player' && remainingAttrition > 0) {
+    // When only a player unit exists in the group, they get no special protection
+    const playerUnit = units[unitIds[0]];
+    unitsToRemove.push(unitIds[0]);
+    
+    playersKilled.push({
+      playerId: playerUnit.id,
+      displayName: playerUnit.displayName || "Unknown Player"
+    });
+    
+    return { unitsToRemove, playersKilled };
+  }
+  
+  // Normal case: First remove regular (non-player) units
   const regularUnitIds = unitIds.filter(id => units[id].type !== 'player');
   
   while (remainingAttrition > 0 && regularUnitIds.length > 0) {
