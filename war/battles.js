@@ -29,8 +29,21 @@ export function calculatePowerRatios(side1Power, side2Power) {
 export function calculateAttrition(sidePower, powerRatio) {
   // Base attrition per tick (5-10% of opponent's power)
   const baseAttritionRate = 0.05 + (Math.random() * 0.05);
-  // The side with more power deals more damage (powerRatio + 0.5 as advantage multiplier)
-  return Math.round(sidePower * baseAttritionRate * (powerRatio + 0.5));
+  
+  // Calculate raw attrition
+  let attrition = Math.round(sidePower * baseAttritionRate * (powerRatio + 0.5));
+  
+  // Ensure battles progress: if both sides have power but attrition is 0,
+  // there's a chance to cause minimum attrition
+  if (attrition === 0 && sidePower > 0) {
+    // 20% chance to cause at least 1 attrition point per tick when it would otherwise be 0
+    // This ensures battles don't stagnate
+    if (Math.random() < 0.2) {
+      attrition = 1;
+    }
+  }
+  
+  return attrition;
 }
 
 /**
