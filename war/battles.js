@@ -33,14 +33,10 @@ export function calculateAttrition(sidePower, powerRatio) {
   // Calculate raw attrition
   let attrition = Math.round(sidePower * baseAttritionRate * (powerRatio + 0.5));
   
-  // Ensure battles progress: if both sides have power but attrition is 0,
-  // there's a chance to cause minimum attrition
-  if (attrition === 0 && sidePower > 0) {
-    // 20% chance to cause at least 1 attrition point per tick when it would otherwise be 0
-    // This ensures battles don't stagnate
-    if (Math.random() < 0.2) {
-      attrition = 1;
-    }
+  // Always ensure at least 1 attrition point when there's power
+  // This ensures battles always progress and don't end in draws due to no casualties
+  if (sidePower > 0) {
+    attrition = Math.max(1, attrition);
   }
   
   return attrition;
