@@ -16,7 +16,7 @@ const UNITS = {
         category: 'player',
         type: 'warrior',
         power: 1,
-        timePerUnit: 60, // seconds
+        timePerUnit: 1, // in ticks (was 60 seconds)
         icon: 'sword',
         cost: { wood: 2, stone: 1 },
         recruitment: {
@@ -30,7 +30,7 @@ const UNITS = {
         category: 'player',
         type: 'scout',
         power: 0.5,
-        timePerUnit: 45,
+        timePerUnit: 0.75, // in ticks (was 45 seconds)
         icon: 'bow',
         cost: { wood: 1, leather: 1 },
         requirements: {
@@ -49,7 +49,7 @@ const UNITS = {
         category: 'player',
         type: 'knight',
         power: 2,
-        timePerUnit: 90,
+        timePerUnit: 1.5, // in ticks (was 90 seconds)
         icon: 'shield',
         race: 'human',
         cost: { wood: 1, stone: 2, iron: 1 },
@@ -72,7 +72,7 @@ const UNITS = {
         category: 'player',
         type: 'archer',
         power: 1.5,
-        timePerUnit: 75,
+        timePerUnit: 1.25, // in ticks (was 75 seconds)
         icon: 'bow',
         race: 'elf',
         cost: { wood: 3, leather: 1 },
@@ -94,7 +94,7 @@ const UNITS = {
         category: 'player',
         type: 'defender',
         power: 2,
-        timePerUnit: 90,
+        timePerUnit: 1.5, // in ticks (was 90 seconds)
         icon: 'shield',
         race: 'dwarf',
         cost: { stone: 2, iron: 2 },
@@ -116,7 +116,7 @@ const UNITS = {
         category: 'player',
         type: 'raider',
         power: 0.75,
-        timePerUnit: 30,
+        timePerUnit: 0.5, // in ticks (was 30 seconds)
         icon: 'sword',
         race: 'goblin',
         cost: { wood: 1 },
@@ -136,7 +136,7 @@ const UNITS = {
         category: 'player',
         type: 'enchanter',
         power: 1.5,
-        timePerUnit: 60,
+        timePerUnit: 1, // in ticks (was 60 seconds)
         icon: 'staff',
         race: 'fairy',
         cost: { herbs: 2, crystal: 1 },
@@ -161,7 +161,7 @@ const UNITS = {
         category: 'player',
         type: 'elite',
         power: 3,
-        timePerUnit: 120,
+        timePerUnit: 2, // in ticks (was 120 seconds)
         icon: 'shield',
         cost: { wood: 2, stone: 2, iron: 2 },
         requirements: {
@@ -182,7 +182,7 @@ const UNITS = {
         category: 'player',
         type: 'siege',
         power: 1.5,
-        timePerUnit: 180,
+        timePerUnit: 3, // in ticks (was 180 seconds)
         icon: 'shield',
         cost: { wood: 5, stone: 3, iron: 2 },
         requirements: {
@@ -206,7 +206,7 @@ const UNITS = {
         category: 'player',
         type: 'worker',
         power: 1.0,
-        timePerUnit: 120,
+        timePerUnit: 2, // in ticks (was 120 seconds)
         icon: 'hammer',
         cost: { wood: 3, stone: 3, iron: 1, tools: 1 },
         requirements: {
@@ -229,7 +229,7 @@ const UNITS = {
         category: 'player',
         type: 'gatherer',
         power: 0.5,
-        timePerUnit: 90,
+        timePerUnit: 1.5, // in ticks (was 90 seconds)
         icon: 'pickaxe',
         cost: { wood: 2, tools: 1 },
         requirements: {
