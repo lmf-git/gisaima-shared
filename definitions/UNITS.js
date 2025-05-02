@@ -1,6 +1,6 @@
 const UNITS = {
     // Player character - represents the player themselves
-    'player_character': {
+    'player': {
         name: 'Player Character',
         description: "The player's own character",
         category: 'player',
