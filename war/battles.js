@@ -5,10 +5,7 @@ export function calculateGroupPower(group) {
     
     // Base calculation using unit count
     let power = Object.values(group.units).reduce((total, unit) => {
-      const unitType = unit.type;
-      const unitPower = unitType && UNITS[unitType] ? 
-        UNITS[unitType].power : (unit.strength || 1);
-      return total + (unitPower || 1);
+      return total + (UNITS[unit.type].power || 1);
     }, 0);
     
     // Ensure minimum power of 1 for any group that exists
