@@ -94,21 +94,6 @@ export class Units {
     return Math.round(basePower * 10) / 10; // Round to 1 decimal place
   }
   
-  /**
-   * For backward compatibility
-   * @deprecated Use calculateUnitPower instead
-   */
-  static calculateMonsterPower(monsterType, qty = 1, isMixed = false, mergeCount = 0) {
-    return Units.calculateUnitPower(monsterType, qty, { isMixed, mergeCount });
-  }
-
-  /**
-   * For backward compatibility
-   * @deprecated Use calculateUnitPower instead
-   */
-  static calculatePlayerUnitPower(unitType, quantity = 1, modifiers = {}) {
-    return Units.calculateUnitPower(unitType, quantity, { modifiers });
-  }
 
   /**
    * Generate items based on unit ID and count

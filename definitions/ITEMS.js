@@ -1,3 +1,20 @@
+// Define item categories with display labels
+export const ITEM_CATEGORIES = {
+  weapon: 'Weapons',
+  tool: 'Tools',
+  consumable: 'Consumables',
+  document: 'Documents',
+  artifact: 'Artifacts',
+  material: 'Materials',
+  scroll: 'Scrolls',
+  trade_good: 'Trade Goods'
+};
+
+// Add a helper function to get categories formatted for display
+export function getItemCategories() {
+  return Object.entries(ITEM_CATEGORIES).map(([id, label]) => ({ id, label }));
+}
+
 export const ITEMS = {
   // Common resources (gathered items)
   WOODEN_STICKS: {
