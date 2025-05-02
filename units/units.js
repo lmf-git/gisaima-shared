@@ -124,14 +124,6 @@ export class Units {
     
     return items;
   }
-  
-  /**
-   * For backward compatibility
-   * @deprecated Use generateItems instead
-   */
-  static generateMonsterItems(monsterType, unitQty = 1) {
-    return Units.generateItems(monsterType, unitQty);
-  }
 
   /**
    * Get appropriate group name based on unit ID and count
@@ -195,14 +187,6 @@ export class Units {
     } else {
       return `Massive ${baseName} Legion`;
     }
-  }
-
-  /**
-   * For backward compatibility
-   * @deprecated Use getUnitGroupName instead
-   */
-  static getMonsterGroupName(monsterType, unitQty) {
-    return Units.getUnitGroupName(monsterType, unitQty);
   }
 
   /**
