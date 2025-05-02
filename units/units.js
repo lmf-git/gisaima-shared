@@ -36,35 +36,14 @@ export class Units {
    * Calculate a unit's combat power based on unit ID and count
    * @param {string} unitId - ID of the unit
    * @param {number} qty - Number of units
-   * @param {object} options - Additional options (isMixed, mergeCount, modifiers)
    * @returns {number} Total combat power
    */
-  static calculateUnitPower(unitId, qty = 1, options = {}) {
+  static calculateUnitPower(unitId, qty = 1) {
     const unit = Units.getUnit(unitId);
     if (!unit) return qty; // Default 1 power per unit
     
     // Base power calculation
     let basePower = unit.power * qty;
-    
-    if (unit.category === 'monster') {
-      // Apply monster-specific bonuses
-      if (options.mergeCount) {
-        const mergeBonus = options.mergeCount * 0.2;
-        basePower *= (1 + mergeBonus);
-      }
-      
-      if (options.isMixed) {
-        basePower *= 1.15;  // 15% bonus for mixed groups
-      }
-    } else {
-      // Apply player unit bonuses
-      if (options.modifiers) {
-        if (options.modifiers.equipment) basePower *= (1 + options.modifiers.equipment * 0.1);
-        if (options.modifiers.training) basePower *= (1 + options.modifiers.training * 0.15);
-        if (options.modifiers.leadership) basePower *= (1 + options.modifiers.leadership * 0.2);
-      }
-    }
-    
     return Math.round(basePower * 10) / 10; // Round to 1 decimal place
   }
   
@@ -161,14 +140,11 @@ export class Units {
    * @param {object} options - Additional options for mixed groups
    * @returns {string} Descriptive unit group name
    */
-  static getUnitGroupName(unitId, unitQty, options = {}) {
+  static getUnitGroupName(unitId, unitQty) {
     const unit = Units.getUnit(unitId);
     if (!unit) return 'Unknown Group';
     
     if (unit.category === 'monster') {
-      if (options.composition) {
-        return Units.getMixedMonsterGroupName(options.composition, unitQty);
-      }
       return Units.getMonsterGroupNameInternal(unitId, unitQty);
     }
     
@@ -186,12 +162,29 @@ export class Units {
    */
   static getMonsterGroupNameInternal(monsterId, unitQty) {
     const monster = Units.getUnit(monsterId, 'monster');
-    if (!monster) return 'Monster Group';
+    if (!monster) {
+      // If monster definition not found, create a fallback name from the monsterId
+      const fallbackName = monsterId ? 
+        monsterId.charAt(0).toUpperCase() + monsterId.slice(1) + ' Creatures' : 
+        'Monster Group';
+      
+      return unitQty <= 3 ? `Small ${fallbackName}` : 
+             unitQty <= 8 ? fallbackName : 
+             `Large ${fallbackName}`;
+    }
     
-    const baseName = monster.name;
+    // Get the base name without redundant size descriptors
+    let baseName = monster.name;
+    // Remove size-related words if they already exist in the name
+    const sizeWords = ['Small', 'Large', 'Massive', 'Giant'];
+    for (const word of sizeWords) {
+      if (baseName.startsWith(word + ' ')) {
+        baseName = baseName.substring(word.length + 1);
+      }
+    }
     
     // Different names based on size
-    if (unitQty <= 2) {
+    if (unitQty <= 3) {
       return `Small ${baseName}`;
     } else if (unitQty <= 5) {
       return baseName;
@@ -246,56 +239,6 @@ export class Units {
     
     // Pick randomly from distribution
     return distribution[Math.floor(Math.random() * distribution.length)];
-  }
-  
-  /**
-   * Generate a name for a mixed monster group
-   * @param {Object} composition - Composition of monster types
-   * @param {number} totalUnits - Total unit count
-   * @returns {string} Group name
-   */
-  static getMixedMonsterGroupName(composition, totalUnits) {
-    // Get the top two types by count
-    const sortedTypes = Object.entries(composition)
-      .sort(([,a], [,b]) => b - a)
-      .map(([type]) => type);
-    
-    let prefix, suffix;
-    
-    // Determine size prefix
-    if (totalUnits <= 4) {
-      prefix = "Small";
-    } else if (totalUnits <= 8) {
-      prefix = "";
-    } else if (totalUnits <= 12) {
-      prefix = "Large";
-    } else {
-      prefix = "Massive";
-    }
-    
-    // Determine group type suffix
-    if (totalUnits <= 4) {
-      suffix = "Band";
-    } else if (totalUnits <= 8) {
-      suffix = "Pack";
-    } else if (totalUnits <= 12) {
-      suffix = "Horde";
-    } else {
-      suffix = "Legion";
-    }
-    
-    // Format name based on composition complexity
-    if (Object.keys(composition).length > 2) {
-      return `${prefix} Mixed Monster ${suffix}`.trim();
-    } else {
-      // Get display names for the top types
-      const typeNames = sortedTypes.slice(0, 2).map(type => {
-        const monster = Units.getUnit(type, 'monster');
-        return monster ? monster.name.split(' ')[0] : Units.capitalizeFirstLetter(type);
-      });
-      
-      return `${prefix} ${typeNames.join('-')} ${suffix}`.trim();
-    }
   }
   
   /**
