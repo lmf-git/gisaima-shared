@@ -61,16 +61,16 @@ export class Units {
   /**
    * Calculate a unit's combat power based on unit ID and count
    * @param {string} unitId - ID of the unit
-   * @param {number} unitCount - Number of units
+   * @param {number} qty - Number of units
    * @param {object} options - Additional options (isMixed, mergeCount, modifiers)
    * @returns {number} Total combat power
    */
-  static calculateUnitPower(unitId, unitCount = 1, options = {}) {
+  static calculateUnitPower(unitId, qty = 1, options = {}) {
     const unit = Units.getUnit(unitId);
-    if (!unit) return unitCount; // Default 1 power per unit
+    if (!unit) return qty; // Default 1 power per unit
     
     // Base power calculation
-    let basePower = unit.power * unitCount;
+    let basePower = unit.power * qty;
     
     if (unit.category === 'monster') {
       // Apply monster-specific bonuses
@@ -98,8 +98,8 @@ export class Units {
    * For backward compatibility
    * @deprecated Use calculateUnitPower instead
    */
-  static calculateMonsterPower(monsterType, unitCount = 1, isMixed = false, mergeCount = 0) {
-    return Units.calculateUnitPower(monsterType, unitCount, { isMixed, mergeCount });
+  static calculateMonsterPower(monsterType, qty = 1, isMixed = false, mergeCount = 0) {
+    return Units.calculateUnitPower(monsterType, qty, { isMixed, mergeCount });
   }
 
   /**
@@ -113,16 +113,16 @@ export class Units {
   /**
    * Generate items based on unit ID and count
    * @param {string} unitId - ID of the unit
-   * @param {number} unitCount - Number of units
+   * @param {number} unitQty - Number of units
    * @returns {Array} Array of generated items
    */
-  static generateItems(unitId, unitCount = 1) {
+  static generateItems(unitId, unitQty = 1) {
     const unit = Units.getUnit(unitId);
     if (!unit) return [];
     
     // Currently only monsters generate items
     if (unit.category === 'monster') {
-      return Units.generateMonsterItemsInternal(unitId, unitCount);
+      return Units.generateMonsterItemsInternal(unitId, unitQty);
     }
     
     // Could implement player item generation here
@@ -133,12 +133,12 @@ export class Units {
    * Internal method for monster item generation
    * @private
    */
-  static generateMonsterItemsInternal(monsterId, unitCount = 1) {
+  static generateMonsterItemsInternal(monsterId, unitQty = 1) {
     const monster = Units.getUnit(monsterId, 'monster');
     if (!monster) return [];
     
     const items = [];
-    const itemCount = Math.min(Math.ceil(unitCount / 2), 3);
+    const itemCount = Math.min(Math.ceil(unitQty / 2), 3);
     
     for (let i = 0; i < itemCount; i++) {
       if (Math.random() < monster.itemChance) {
@@ -184,33 +184,33 @@ export class Units {
    * For backward compatibility
    * @deprecated Use generateItems instead
    */
-  static generateMonsterItems(monsterType, unitCount = 1) {
-    return Units.generateItems(monsterType, unitCount);
+  static generateMonsterItems(monsterType, unitQty = 1) {
+    return Units.generateItems(monsterType, unitQty);
   }
 
   /**
    * Get appropriate group name based on unit ID and count
    * @param {string} unitId - ID of the unit
-   * @param {number} unitCount - Number of units
+   * @param {number} unitQty - Number of units
    * @param {object} options - Additional options for mixed groups
    * @returns {string} Descriptive unit group name
    */
-  static getUnitGroupName(unitId, unitCount, options = {}) {
+  static getUnitGroupName(unitId, unitQty, options = {}) {
     const unit = Units.getUnit(unitId);
     if (!unit) return 'Unknown Group';
     
     if (unit.category === 'monster') {
       if (options.composition) {
-        return Units.getMixedMonsterGroupName(options.composition, unitCount);
+        return Units.getMixedMonsterGroupName(options.composition, unitQty);
       }
-      return Units.getMonsterGroupNameInternal(unitId, unitCount);
+      return Units.getMonsterGroupNameInternal(unitId, unitQty);
     }
     
     // Player unit group naming
-    if (unitCount <= 1) {
+    if (unitQty <= 1) {
       return unit.name;
     } else {
-      return `${unit.name} Group (${unitCount})`;
+      return `${unit.name} Group (${unitQty})`;
     }
   }
 
@@ -218,20 +218,20 @@ export class Units {
    * Internal method for monster group naming
    * @private
    */
-  static getMonsterGroupNameInternal(monsterId, unitCount) {
+  static getMonsterGroupNameInternal(monsterId, unitQty) {
     const monster = Units.getUnit(monsterId, 'monster');
     if (!monster) return 'Monster Group';
     
     const baseName = monster.name;
     
     // Different names based on size
-    if (unitCount <= 2) {
+    if (unitQty <= 2) {
       return `Small ${baseName}`;
-    } else if (unitCount <= 5) {
+    } else if (unitQty <= 5) {
       return baseName;
-    } else if (unitCount <= 8) {
+    } else if (unitQty <= 8) {
       return `${baseName} Warband`;
-    } else if (unitCount <= 12) {
+    } else if (unitQty <= 12) {
       return `${baseName} Horde`;
     } else {
       return `Massive ${baseName} Legion`;
@@ -242,8 +242,8 @@ export class Units {
    * For backward compatibility
    * @deprecated Use getUnitGroupName instead
    */
-  static getMonsterGroupName(monsterType, unitCount) {
-    return Units.getUnitGroupName(monsterType, unitCount);
+  static getMonsterGroupName(monsterType, unitQty) {
+    return Units.getUnitGroupName(monsterType, unitQty);
   }
 
   /**
