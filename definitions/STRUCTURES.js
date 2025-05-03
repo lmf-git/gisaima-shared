@@ -1,49 +1,106 @@
 export const STRUCTURES = {
   'monster_lair': {
     name: "Monster Lair",
-    buildCost: {
-      'Wooden Sticks': 8,
-      'Stone Pieces': 6
-    },
+    description: "A basic monster dwelling",
+    type: "monster_lair",
+    requiredResources: [
+      { id: 'WOODEN_STICKS', quantity: 8 },
+      { id: 'STONE_PIECES', quantity: 6 }
+    ],
     buildTime: 1,
     capacity: 10,
-    features: ['basic_storage', 'monster_spawning'],
+    features: [
+      {
+        name: 'Basic Storage',
+        description: 'Stores resources and items',
+        icon: '📦'
+      },
+      {
+        name: 'Monster Spawning',
+        description: 'Allows new monsters to join',
+        icon: '🐾'
+      }
+    ],
     monster: true
   },
   'monster_fortress': {
     name: "Monster Fortress",
-    buildCost: {
-      'Wooden Sticks': 15,
-      'Stone Pieces': 12,
-      'Monster Hide': 5
-    },
+    description: "A fortified monster stronghold",
+    type: "monster_fortress",
+    requiredResources: [
+      { id: 'WOODEN_STICKS', quantity: 15 },
+      { id: 'STONE_PIECES', quantity: 12 },
+      { id: 'MONSTER_HIDE', quantity: 5 }
+    ],
     buildTime: 2,
     capacity: 25,
-    features: ['advanced_storage', 'monster_defense', 'monster_spawning'],
+    features: [
+      {
+        name: 'Advanced Storage',
+        description: 'Stores more resources and items',
+        icon: '📦'
+      },
+      {
+        name: 'Monster Defense',
+        description: 'Improved defensive capabilities',
+        icon: '🛡️'
+      },
+      {
+        name: 'Monster Spawning',
+        description: 'Allows new monsters to join',
+        icon: '🐾'
+      }
+    ],
     monster: true
   },
   'monster_hive': {
     name: "Monster Hive",
-    buildCost: {
-      'Wooden Sticks': 10,
-      'Stone Pieces': 8,
-      'Monster Blood': 3
-    },
+    description: "A place where monsters are born",
+    type: "monster_hive",
+    requiredResources: [
+      { id: 'WOODEN_STICKS', quantity: 10 },
+      { id: 'STONE_PIECES', quantity: 8 },
+      { id: 'MONSTER_BLOOD', quantity: 3 }
+    ],
     buildTime: 1,
     capacity: 15,
-    features: ['monster_spawning', 'rapid_growth'],
+    features: [
+      {
+        name: 'Monster Spawning',
+        description: 'Allows new monsters to join',
+        icon: '🐾'
+      },
+      {
+        name: 'Rapid Growth',
+        description: 'Monsters grow and reproduce quickly',
+        icon: '⚡'
+      }
+    ],
     monster: true
   },
   'monster_den': {
     name: "Monster Den",
-    buildCost: {
-      'Wooden Sticks': 12,
-      'Stone Pieces': 8,
-      'Bone Fragment': 4
-    },
+    description: "A hidden place for monsters to rest",
+    type: "monster_den",
+    requiredResources: [
+      { id: 'WOODEN_STICKS', quantity: 12 },
+      { id: 'STONE_PIECES', quantity: 8 },
+      { id: 'BONE_FRAGMENT', quantity: 4 }
+    ],
     buildTime: 1,
     capacity: 20,
-    features: ['monster_healing', 'territory_control'],
+    features: [
+      {
+        name: 'Monster Healing',
+        description: 'Monsters heal over time',
+        icon: '❤️'
+      },
+      {
+        name: 'Territory Control',
+        description: 'Monsters defend their territory',
+        icon: '🚧'
+      }
+    ],
     monster: true
   },
   'basic_shelter': {
@@ -55,8 +112,8 @@ export const STRUCTURES = {
       defense: 1
     },
     requiredResources: [
-      { name: 'wood', quantity: 5 },
-      { name: 'stone', quantity: 3 }
+      { id: 'WOODEN_STICKS', quantity: 5 },
+      { id: 'STONE_PIECES', quantity: 3 }
     ],
     buildTime: 2,
     features: [
@@ -78,8 +135,8 @@ export const STRUCTURES = {
       detection: 2
     },
     requiredResources: [
-      { name: 'wood', quantity: 8 },
-      { name: 'stone', quantity: 5 }
+      { id: 'WOODEN_STICKS', quantity: 8 },
+      { id: 'STONE_PIECES', quantity: 5 }
     ],
     buildTime: 3,
     features: [
@@ -98,9 +155,9 @@ export const STRUCTURES = {
     durability: 80,
     capacity: 10,
     requiredResources: [
-      { name: 'wood', quantity: 6 },
-      { name: 'stone', quantity: 2 },
-      { name: 'fiber', quantity: 4 }
+      { id: 'WOODEN_STICKS', quantity: 6 },
+      { id: 'STONE_PIECES', quantity: 2 },
+      { id: 'MEDICINAL_HERBS', quantity: 4 } // Changed from "Fiber" to existing MEDICINAL_HERBS
     ],
     buildTime: 2,
     features: [
@@ -119,9 +176,9 @@ export const STRUCTURES = {
     durability: 120,
     craftingSpeed: 1.5,
     requiredResources: [
-      { name: 'wood', quantity: 10 },
-      { name: 'stone', quantity: 8 },
-      { name: 'metal', quantity: 3 }
+      { id: 'WOODEN_STICKS', quantity: 10 },
+      { id: 'STONE_PIECES', quantity: 8 },
+      { id: 'IRON_ORE', quantity: 3 } // Changed from "Metal" to specific IRON_ORE
     ],
     buildTime: 5,
     features: [
