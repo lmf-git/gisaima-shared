@@ -1,7 +1,3 @@
-/**
- * Structure definitions for Gisaima
- */
-
 export const STRUCTURES = {
   'monster_lair': {
     name: "Monster Lair",
@@ -12,7 +8,7 @@ export const STRUCTURES = {
     buildTime: 1,
     capacity: 10,
     features: ['basic_storage', 'monster_spawning'],
-    monster: true // Explicitly marked as monster structure
+    monster: true
   },
   'monster_fortress': {
     name: "Monster Fortress",
@@ -62,7 +58,7 @@ export const STRUCTURES = {
       { name: 'wood', quantity: 5 },
       { name: 'stone', quantity: 3 }
     ],
-    buildTime: 2, // in ticks
+    buildTime: 2,
     features: [
       {
         name: 'Basic Shelter',
