@@ -257,7 +257,8 @@ const UNITS = {
         power: 0.7,
         speed: 1.2,
         possibleItems: ['Wooden Sticks', 'Stolen Goods', 'Crude Weapon'],
-        biomePreference: ['plains', 'forest']
+        biomePreference: ['plains', 'forest'],
+        personalityPreferences: ['SNEAKY', 'CAUTIOUS'] // Goblins tend to be sneaky thieves
     },
     'wolf': {
         name: "Wild Wolves",
@@ -270,7 +271,8 @@ const UNITS = {
         power: 1.2,
         speed: 1.5,
         possibleItems: ['Wolf Meat', 'Wolf Pelt', 'Wolf Fang'],
-        biomePreference: ['forest', 'tundra']
+        biomePreference: ['forest', 'tundra'],
+        personalityPreferences: ['FERAL', 'AGGRESSIVE', 'TERRITORIAL'] // Wolves are wild and territorial
     },
     'bandit': {
         name: "Bandits",
@@ -283,7 +285,8 @@ const UNITS = {
         power: 1.0,
         speed: 1.0,
         possibleItems: ['Ancient Coin', 'Crude Weapon', 'Leather Scraps'],
-        biomePreference: ['plains', 'forest']
+        biomePreference: ['plains', 'forest'],
+        personalityPreferences: ['AGGRESSIVE', 'SNEAKY'] // Bandits are either direct attackers or stealthy thieves
     },
     'spider': {
         name: "Giant Spiders",
@@ -296,7 +299,8 @@ const UNITS = {
         power: 0.9,
         speed: 1.2,
         possibleItems: ['Spider Silk', 'Venom Sac', 'Spider Eye'],
-        biomePreference: ['forest', 'swamp']
+        biomePreference: ['forest', 'swamp'],
+        personalityPreferences: ['SNEAKY', 'TERRITORIAL'] // Spiders are territorial and sneaky
     },
     'skeleton': {
         name: "Undead Skeletons",
@@ -309,7 +313,8 @@ const UNITS = {
         power: 0.8,
         speed: 0.9,
         possibleItems: ['Bone Dust', 'Ancient Blade', 'Soul Essence'],
-        biomePreference: ['desert', 'mountain', 'ruins']
+        biomePreference: ['desert', 'mountain', 'ruins'],
+        personalityPreferences: ['NOMADIC', 'FERAL'] // Undead wander aimlessly and unpredictably
     },
     'troll': {
         name: "Mountain Troll",
@@ -322,7 +327,8 @@ const UNITS = {
         power: 2.5,
         speed: 0.7,
         possibleItems: ['Troll Hide', 'Troll Club', 'Troll Tooth'],
-        biomePreference: ['mountain', 'hills']
+        biomePreference: ['mountain', 'hills'],
+        personalityPreferences: ['AGGRESSIVE', 'TERRITORIAL'] // Trolls are aggressive and territorial
     },
     'elemental': {
         name: "Wild Elemental",
@@ -335,7 +341,8 @@ const UNITS = {
         power: 2.0,
         speed: 1.0,
         possibleItems: ['Elemental Essence', 'Shiny Gem', 'Magical Residue'],
-        biomePreference: ['tundra', 'desert', 'swamp']
+        biomePreference: ['tundra', 'desert', 'swamp'],
+        personalityPreferences: ['FERAL', 'NOMADIC'] // Elementals are wild and wander
     }
 };
 
