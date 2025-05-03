@@ -12,7 +12,7 @@ export const STRUCTURES = {
     buildTime: 1,
     capacity: 10,
     features: ['basic_storage', 'monster_spawning'],
-    monster: true
+    monster: true // Explicitly marked as monster structure
   },
   'monster_fortress': {
     name: "Monster Fortress",
@@ -36,6 +36,18 @@ export const STRUCTURES = {
     buildTime: 1,
     capacity: 15,
     features: ['monster_spawning', 'rapid_growth'],
+    monster: true
+  },
+  'monster_den': {
+    name: "Monster Den",
+    buildCost: {
+      'Wooden Sticks': 12,
+      'Stone Pieces': 8,
+      'Bone Fragment': 4
+    },
+    buildTime: 1,
+    capacity: 20,
+    features: ['monster_healing', 'territory_control'],
     monster: true
   },
   'basic_shelter': {
