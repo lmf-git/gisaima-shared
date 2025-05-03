@@ -120,3 +120,45 @@ export function getRandomPersonality(monsterType) {
   // Default to random selection
   return personalities[Math.floor(Math.random() * personalities.length)];
 }
+
+/**
+ * Determine if a monster's personality should change
+ * @param {Object} monsterGroup - Monster group data
+ * @param {number} now - Current timestamp
+ * @returns {boolean} True if personality should change
+ */
+export function shouldChangePersonality(monsterGroup, now) {
+  // Base chance is 0.5% per tick for personality change
+  const baseChance = 0.005;
+  
+  // Don't change personality too frequently (minimum 30 minutes)
+  if (monsterGroup.lastPersonalityChange && 
+      now - monsterGroup.lastPersonalityChange < 1800000) {
+    return false;
+  }
+  
+  // Increase chance if monster has experienced certain events
+  let finalChance = baseChance;
+  
+  // Monsters that have been in battle recently are more likely to change
+  if (monsterGroup.lastBattleTime && now - monsterGroup.lastBattleTime < 3600000) {
+    finalChance *= 2; // Double chance if in battle within last hour
+  }
+  
+  // Monsters that have stolen items recently might change
+  if (monsterGroup.hasStolenItems) {
+    finalChance *= 1.5; // 50% more likely if has stolen items
+  }
+  
+  // Feral personality is more unstable
+  if (monsterGroup.personality?.id === 'FERAL') {
+    finalChance *= 3; // Triple chance for feral monsters
+  }
+  
+  // Territorial personality is more stable
+  if (monsterGroup.personality?.id === 'TERRITORIAL') {
+    finalChance *= 0.5; // Half chance for territorial monsters
+  }
+  
+  return Math.random() < finalChance;
+}
