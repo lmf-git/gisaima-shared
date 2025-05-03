@@ -70,6 +70,42 @@ export const BUILDINGS = {
         { name: 'Wooden Sticks', quantity: 10 },
         { name: 'Seeds', quantity: 5 }
       ]
+    },
+    
+    // Monster building types
+    monster_nest: {
+      name: "Monster Nest",
+      description: "A crude nesting area that provides shelter for weaker monsters",
+      icon: "🪹",
+      upgradeTimeMultiplier: 0.8,
+      monster: true,
+      baseRequirements: [
+        { name: 'Wooden Sticks', quantity: 5 },
+        { name: 'Stone Pieces', quantity: 3 }
+      ]
+    },
+    monster_forge: {
+      name: "Monster Forge",
+      description: "A primitive forge used by more advanced monster groups to craft crude weapons",
+      icon: "🔥",
+      upgradeTimeMultiplier: 1.2,
+      monster: true,
+      baseRequirements: [
+        { name: 'Stone Pieces', quantity: 10 },
+        { name: 'Iron Ore', quantity: 3 }
+      ]
+    },
+    monster_totem: {
+      name: "Monster Totem",
+      description: "A ritual structure that enhances monster abilities",
+      icon: "🗿",
+      upgradeTimeMultiplier: 1.5,
+      monster: true,
+      baseRequirements: [
+        { name: 'Wooden Sticks', quantity: 8 },
+        { name: 'Stone Pieces', quantity: 4 },
+        { name: 'Crystal Shard', quantity: 1 }
+      ]
     }
   },
   
@@ -285,6 +321,23 @@ export const BUILDINGS = {
           unlocks: ['dragon_fruit', 'golden_apple']
         }
       ]
+    },
+    
+    // Monster building benefits
+    monster_nest: {
+      1: [{ name: 'Monster Shelter', description: 'Provides basic shelter for monsters', bonus: { monsterRegeneration: 0.1 } }],
+      2: [{ name: 'Improved Nesting', description: 'Allows faster recovery', bonus: { monsterRegeneration: 0.2 } }],
+      3: [{ name: 'Advanced Nest', description: 'Attracts more monsters to the area', unlocks: ['monster_spawning'] }]
+    },
+    monster_forge: {
+      1: [{ name: 'Basic Smithing', description: 'Allows crafting simple weapons', unlocks: ['crude_weapon'] }],
+      2: [{ name: 'Improved Forge', description: 'Better weapon crafting', bonus: { attackPower: 0.1 } }],
+      3: [{ name: 'Monster Arsenal', description: 'Creates better monster weapons', unlocks: ['monster_weapons'] }]
+    },
+    monster_totem: {
+      1: [{ name: 'Ritual Site', description: 'Empowers nearby monsters', bonus: { monsterPower: 0.1 } }],
+      2: [{ name: 'Power Totem', description: 'Further empowers monsters', bonus: { monsterPower: 0.2 } }],
+      3: [{ name: 'Elder Totem', description: 'Allows commanding other monster groups', unlocks: ['monster_command'] }]
     }
   },
   
