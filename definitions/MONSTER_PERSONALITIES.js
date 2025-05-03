@@ -115,6 +115,26 @@ export const MONSTER_PERSONALITIES = {
     }
   },
   
+  FERAL: {
+    id: 'FERAL',
+    name: 'Feral',
+    description: 'Extremely aggressive and unpredictable, will attack any target including other monsters',
+    emoji: '🐺',
+    weights: {
+      attack: 2.5,      // Extremely aggressive
+      merge: 0.3,       // Rarely merges with other groups
+      gather: 0.5,      // Less interested in gathering
+      build: 0.2,       // Almost never builds
+      flee: 0.1,        // Almost never flees
+      explore: 1.2,     // Actively explores to find targets
+      joinBattle: 1.8,  // Eager to join battles
+      attackMonsters: 3.0  // Strong preference for attacking other monster groups
+    },
+    // Special behavior flags
+    canAttackMonsters: true,    // Can target other monster groups
+    randomBattleSides: true     // May join either side of a battle randomly
+  },
+
   NOMADIC: {
     id: 'NOMADIC',
     name: 'Nomadic',
@@ -167,7 +187,8 @@ export function getRandomPersonality(monsterType = null, biome = null) {
     BUILDER: 0.05,
     CAUTIOUS: 0.10,
     PROTECTIVE: 0.05,
-    NOMADIC: 0.05
+    NOMADIC: 0.05,
+    FERAL: 0.03      // Feral is quite rare
   };
   
   // Create weighted distribution
