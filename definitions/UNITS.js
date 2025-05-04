@@ -18,7 +18,7 @@ const UNITS = {
         power: 1,
         timePerUnit: 1, // in ticks (was 60 seconds)
         icon: 'sword',
-        cost: { wood: 2, stone: 1 },
+        cost: { WOODEN_STICKS: 2, STONE_PIECES: 1 },
         recruitment: {
             sortOrder: 10,
             tooltip: "Basic frontline fighter"
@@ -32,7 +32,7 @@ const UNITS = {
         power: 0.5,
         timePerUnit: 0.75, // in ticks (was 45 seconds)
         icon: 'bow',
-        cost: { wood: 1, leather: 1 },
+        cost: { WOODEN_STICKS: 1, LEATHER: 1 },
         requirements: {
             structureLevel: 1
         },
@@ -52,7 +52,7 @@ const UNITS = {
         timePerUnit: 1.5, // in ticks (was 90 seconds)
         icon: 'shield',
         race: 'human',
-        cost: { wood: 1, stone: 2, iron: 1 },
+        cost: { WOODEN_STICKS: 1, STONE_PIECES: 2, IRON: 1 },
         requirements: {
             structureLevel: 2,
             race: 'human',
@@ -75,7 +75,7 @@ const UNITS = {
         timePerUnit: 1.25, // in ticks (was 75 seconds)
         icon: 'bow',
         race: 'elf',
-        cost: { wood: 3, leather: 1 },
+        cost: { WOODEN_STICKS: 3, LEATHER: 1 },
         requirements: {
             structureLevel: 2,
             race: 'elf',
@@ -97,7 +97,7 @@ const UNITS = {
         timePerUnit: 1.5, // in ticks (was 90 seconds)
         icon: 'shield',
         race: 'dwarf',
-        cost: { stone: 2, iron: 2 },
+        cost: { STONE_PIECES: 2, IRON: 2 },
         requirements: {
             structureLevel: 2,
             race: 'dwarf',
@@ -119,7 +119,7 @@ const UNITS = {
         timePerUnit: 0.5, // in ticks (was 30 seconds)
         icon: 'sword',
         race: 'goblin',
-        cost: { wood: 1 },
+        cost: { WOODEN_STICKS: 1 },
         requirements: {
             structureLevel: 2,
             race: 'goblin'
@@ -163,7 +163,7 @@ const UNITS = {
         power: 3,
         timePerUnit: 2, // in ticks (was 120 seconds)
         icon: 'shield',
-        cost: { wood: 2, stone: 2, iron: 2 },
+        cost: { WOODEN_STICKS: 2, STONE_PIECES: 2, IRON: 2 },
         requirements: {
             structureType: ['fortress', 'stronghold', 'watchtower'], // Added watchtower as valid structure
             structureLevel: 2,
@@ -184,7 +184,7 @@ const UNITS = {
         power: 1.5,
         timePerUnit: 3, // in ticks (was 180 seconds)
         icon: 'shield',
-        cost: { wood: 5, stone: 3, iron: 2 },
+        cost: { WOODEN_STICKS: 5, STONE_PIECES: 3, IRON: 2 },
         requirements: {
             structureType: ['fortress', 'stronghold', 'workshop'], // Added workshop as valid structure
             structureLevel: 3,
@@ -208,7 +208,7 @@ const UNITS = {
         power: 1.0,
         timePerUnit: 2, // in ticks (was 120 seconds)
         icon: 'hammer',
-        cost: { wood: 3, stone: 3, iron: 1, tools: 1 },
+        cost: { WOODEN_STICKS: 3, STONE_PIECES: 3, IRON: 1 },
         requirements: {
             structureType: ['workshop', 'storage'], // Requires specific structure types
             structureLevel: 2,
@@ -231,7 +231,7 @@ const UNITS = {
         power: 0.5,
         timePerUnit: 1.5, // in ticks (was 90 seconds)
         icon: 'pickaxe',
-        cost: { wood: 2, tools: 1 },
+        cost: { WOODEN_STICKS: 2, tools: 1 },
         requirements: {
             structureType: ['storage'], // Requires storage structure
             structureLevel: 1,

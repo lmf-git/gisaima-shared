@@ -31,6 +31,13 @@ export const ITEMS = {
     description: 'Small rocks useful for crafting tools',
     biomes: ['plains', 'forest', 'mountains', 'desert', 'ruins', 'wastes']
   },
+
+  LEATHER: {
+    name: 'Leather',
+    type: 'resource',
+    rarity: 'common',
+    description: 'Tough hide used in crafting armor and goods'
+  },
   
   // Craftable items
   WOODEN_SWORD: {
@@ -63,7 +70,24 @@ export const ITEMS = {
       requiredLevel: 2
     }
   },
-  
+  HERBS: {
+    name: 'Herbs',
+    type: 'resource',
+    rarity: 'common',
+    description: 'Plants used for potions and healing'
+  },
+  CRYSTAL: {
+    name: 'Crystal',
+    type: 'resource',
+    rarity: 'uncommon',
+    description: 'Magical shard used for enchantments'
+  },
+  IRON: {
+    name: 'Iron',
+    type: 'resource',
+    rarity: 'common',
+    description: 'Strong metal used for weapons and tools'
+  },
   IRON_SWORD: {
     name: 'Iron Sword',
     type: 'weapon',
