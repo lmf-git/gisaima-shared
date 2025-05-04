@@ -45,6 +45,7 @@ export const ITEMS = {
     type: 'weapon',
     rarity: 'common',
     description: 'A basic wooden sword. Not very durable but better than nothing.',
+    power: 2, // Battle power contribution
     recipe: {
       materials: {
         WOODEN_STICKS: 5
@@ -60,6 +61,7 @@ export const ITEMS = {
     type: 'weapon',
     rarity: 'common',
     description: 'A stone-bladed sword. More durable than wood.',
+    power: 5, // Battle power contribution
     recipe: {
       materials: {
         WOODEN_STICKS: 2,
@@ -93,6 +95,7 @@ export const ITEMS = {
     type: 'weapon',
     rarity: 'uncommon',
     description: 'A well-crafted iron sword. Standard issue for many fighters.',
+    power: 10, // Battle power contribution
     recipe: {
       materials: {
         WOODEN_STICKS: 2,
@@ -135,6 +138,7 @@ export const ITEMS = {
     type: 'artifact',
     rarity: 'rare',
     description: 'A strange object of unknown origin',
+    power: 8, // Battle power contribution
     biomes: ['ruins', 'wastes'] // Special item found in specific areas
   },
   
@@ -279,6 +283,7 @@ export const ITEMS = {
     type: 'weapon',
     rarity: 'common',
     description: 'A simple weapon dropped by a monster',
+    power: 3, // Battle power contribution
     monsterDrop: true
   },
   MONSTER_HIDE: {
@@ -300,6 +305,7 @@ export const ITEMS = {
     type: 'trophy',
     rarity: 'uncommon',
     description: 'Sharp tooth taken from a slain creature',
+    power: 2, // Battle power contribution
     monsterDrop: true
   },
   MONSTER_BLOOD: {
@@ -321,6 +327,7 @@ export const ITEMS = {
     type: 'gem',
     rarity: 'epic',
     description: 'Crystallized magical energy from a powerful creature',
+    power: 15, // Battle power contribution
     monsterDrop: true
   }
 };
@@ -415,4 +422,10 @@ export function getBiomeItems(biomeName) {
     }));
   
   return biomeItems;
+}
+
+// New helper function to get item power contribution
+export function getItemPower(itemId) {
+  const item = ITEMS[itemId];
+  return item && item.power ? item.power : 0;
 }
