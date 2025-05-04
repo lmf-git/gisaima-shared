@@ -188,6 +188,42 @@ export const STRUCTURES = {
         icon: '🔨'
       }
     ]
+  },
+  
+  'outpost': {
+    name: 'Outpost',
+    description: 'A forward base providing a foothold in new territories',
+    type: 'outpost',
+    durability: 200,
+    sightRange: 3,
+    bonuses: {
+      defense: 2,
+      detection: 1
+    },
+    requiredResources: [
+      { id: 'WOODEN_STICKS', quantity: 12 },
+      { id: 'STONE_PIECES', quantity: 8 },
+      { id: 'IRON_ORE', quantity: 4 }
+    ],
+    buildTime: 4,
+    capacity: 8,
+    features: [
+      {
+        name: 'Forward Base',
+        description: 'Allows establishing presence in new territories',
+        icon: '🏕️'
+      },
+      {
+        name: 'Extended Vision',
+        description: 'Provides sight over surrounding area',
+        icon: '👁️'
+      },
+      {
+        name: 'Basic Storage',
+        description: 'Stores resources and supplies',
+        icon: '📦'
+      }
+    ]
   }
 };
 
