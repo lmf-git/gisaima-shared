@@ -25,26 +25,29 @@ export function calculatePowerRatios(side1Power, side2Power) {
 
 /**
  * Calculates attrition (damage) based on power values and ratios
+ * @param {number} sidePower - The power of the side receiving casualties
+ * @param {number} sideRatio - The power ratio of the side receiving casualties
+ * @param {number} opposingRatio - The power ratio of the opposing side
  */
-export function calculateAttrition(sidePower, powerRatio) {
+export function calculateAttrition(sidePower, sideRatio, opposingRatio) {
   // Base attrition per tick (5-10% of opponent's power)
   const baseAttritionRate = 0.05 + (Math.random() * 0.05);
   
   // Calculate raw attrition
-  let attrition = Math.round(sidePower * baseAttritionRate * (powerRatio + 0.5));
+  let attrition = Math.round(sidePower * baseAttritionRate * (opposingRatio + 0.5));
   
-  // Power dominance factor - how much stronger this side is compared to opponent
-  // powerRatio near 1.0 means very dominant, near 0 means very weak
-  const powerDominance = Math.max(0, powerRatio * 2 - 0.5); // Scale to 0-1.5 range
+  // Power dominance factor - how much stronger the opposing side is
+  // opposingRatio near 1.0 means opponent is very dominant
+  const powerDominance = Math.max(0, opposingRatio * 2 - 0.5); // Scale to 0-1.5 range
   
-  // Chance of taking zero casualties increases with power dominance
-  // When powerRatio is 0.95+ (extreme dominance), up to 90% chance of no casualties
-  const zeroAttritionChance = Math.min(0.9, powerDominance * 0.95);
+  // Chance of taking zero casualties decreases as opponent's power dominance increases
+  // When opposingRatio is 0.95+ (extreme dominance by opponent), high chance of casualties
+  const zeroAttritionChance = Math.min(0.9, (1 - powerDominance) * 0.95);
   
   // Apply chance of zero attrition for dominant forces
-  if (powerRatio > 0.75 && Math.random() < zeroAttritionChance) {
+  if (sideRatio > 0.75 && Math.random() < zeroAttritionChance) {
     attrition = 0;
-    console.log(`Side with ${powerRatio.toFixed(2)} power ratio takes no casualties due to overwhelming advantage`);
+    console.log(`Side with ${sideRatio.toFixed(2)} power ratio takes no casualties due to overwhelming advantage`);
   } 
   // For weaker sides or when random chance doesn't lead to zero attrition
   else if (sidePower > 0) {
