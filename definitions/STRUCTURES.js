@@ -9,6 +9,7 @@ export const STRUCTURES = {
     ],
     buildTime: 1,
     capacity: 10,
+    durability: 80,
     features: [
       {
         name: 'Basic Storage',
@@ -34,6 +35,7 @@ export const STRUCTURES = {
     ],
     buildTime: 2,
     capacity: 25,
+    durability: 80,
     features: [
       {
         name: 'Advanced Storage',
@@ -64,6 +66,7 @@ export const STRUCTURES = {
     ],
     buildTime: 1,
     capacity: 15,
+    durability: 80,
     features: [
       {
         name: 'Monster Spawning',
@@ -89,6 +92,7 @@ export const STRUCTURES = {
     ],
     buildTime: 1,
     capacity: 20,
+    durability: 80,
     features: [
       {
         name: 'Monster Healing',
