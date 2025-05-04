@@ -19,6 +19,11 @@ export const ACHIEVEMENTS = {
     description: 'Gather resources for the first time',
     category: 'items',
   },
+  'first_recruit': {
+    title: 'Recruiter',
+    description: 'Recruit your first unit',
+    category: 'social',
+  },
   'first_message': {
     title: 'Communicator',
     description: 'Send your first chat message',
