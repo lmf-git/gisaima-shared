@@ -1,4 +1,18 @@
+import { build } from "$service-worker";
+
 export const STRUCTURES = {
+  'spawn': {
+    description: "Generic Spawn",
+    name: "Generic Spawn",
+    type: "spawn",
+    durability: 120,
+    capacity: 50,
+    buildTime: 0,
+    requiredResources: [
+      { id: 'WOODEN_STICKS', quantity: 8 },
+      { id: 'STONE_PIECES', quantity: 6 }
+    ],
+  },
   'monster_lair': {
     name: "Monster Lair",
     description: "A basic monster dwelling",
@@ -9,7 +23,7 @@ export const STRUCTURES = {
     ],
     buildTime: 1,
     capacity: 10,
-    durability: 120, // Increased from 80
+    durability: 120,
     features: [
       {
         name: 'Basic Storage',
