@@ -1,6 +1,8 @@
 // Implementation of Simplex Noise - more efficient than Perlin or Worley
 // Adapted for terrain generation with height and moisture maps
 
+import { BIOMES, getWaterChannelColor } from "../definitions/BIOMES.js";
+
 export class SimplexNoise {
   constructor(seed) {
     this.seed = seed || Math.random();
@@ -1786,7 +1788,7 @@ export class TerrainGenerator {
     };
   }
 
-  // Base biome classification logic - Updated to use anomaly data
+  // Base biome classification logic - Updated to use biomes from BIOMES.js
   getBaseBiomeInfo(x, y, height, moisture, continentValue = 1.0, riverValue = 0, lakeValue = 0, 
                   lavaValue = 0, slope = 0, scorchedValue = 0, isCliff = false, 
                   isHighCliff = false, capillaryValue = 0, waterNetworkValue = 0,
@@ -1795,21 +1797,21 @@ export class TerrainGenerator {
     
     // 1. LAVA/MAGMA - Highest priority with enhanced bright colors
     if (lavaValue > 0.1) {
-      if (lavaValue > 0.85) return { name: "magma_flow", color: "#FF2200" };  // Even brighter red-orange
-      if (lavaValue > 0.65) return { name: "lava_flow", color: "#FF5000" };   // More vibrant orange
-      if (lavaValue > 0.4) return { name: "volcanic_rock", color: "#6A3A28" };
-      return { name: "volcanic_soil", color: "#7D4B3A" };
+      if (lavaValue > 0.85) return BIOMES.LAVA.MAGMA_FLOW;
+      if (lavaValue > 0.65) return BIOMES.LAVA.LAVA_FLOW;
+      if (lavaValue > 0.4) return BIOMES.LAVA.VOLCANIC_ROCK;
+      return BIOMES.LAVA.VOLCANIC_SOIL;
     }
     
     // 2. WATER FEATURES - Second highest priority with unified colors
     // OCEAN FEATURES - Enhanced with more distinction between water types
-    if (continentValue < 0.08) return { name: "deep_ocean", color: "#0E3B59" }; // Reduced from 0.10
-    if (continentValue < 0.19) return { name: "ocean", color: "#1A4F76" };      // Reduced from 0.23
-    if (continentValue < 0.30) return { name: "sea", color: "#2D6693" };        // Reduced from 0.36
+    if (continentValue < 0.08) return BIOMES.OCEAN.DEEP_OCEAN;
+    if (continentValue < 0.19) return BIOMES.OCEAN.OCEAN;
+    if (continentValue < 0.30) return BIOMES.OCEAN.SEA;
     
     // COASTAL WATERS
     const waterLevel = TERRAIN_OPTIONS.constants.waterLevel;
-    if (height < waterLevel) return { name: "shallows", color: "#5d99b8" };
+    if (height < waterLevel) return BIOMES.OCEAN.SHALLOWS;
 
     // ENHANCED COASTAL TRANSITION ZONES - wider and more varied
     const coastalZoneWidth = TERRAIN_OPTIONS.coastal.primaryZoneWidth;
@@ -1822,16 +1824,16 @@ export class TerrainGenerator {
     if (height < waterLevel + coastalZoneWidth + coastVariation) {
       // Check slope to determine if this is a cliff coast
       if (slope > TERRAIN_OPTIONS.coastal.cliffThreshold) {
-        return { name: "sea_cliff", color: "#7A736B" };
+        return BIOMES.COASTAL.SEA_CLIFF;
       }
       
       // Different shore types based on moisture
       if (moisture < 0.4) {
-        return { name: "sandy_beach", color: "#E8D7A7" };
+        return BIOMES.COASTAL.SANDY_BEACH;
       } else if (moisture < 0.7) {
-        return { name: "rocky_shore", color: "#A8A095" };
+        return BIOMES.COASTAL.ROCKY_SHORE;
       } else {
-        return { name: "marshy_shore", color: "#607A63" };
+        return BIOMES.COASTAL.MARSHY_SHORE;
       }
     }
     
@@ -1839,11 +1841,11 @@ export class TerrainGenerator {
     const secondaryWidth = TERRAIN_OPTIONS.coastal.secondaryZoneWidth;
     if (height < waterLevel + coastalZoneWidth + secondaryWidth + coastVariation) {
       if (moisture < 0.35) {
-        return { name: "dunes", color: "#D8CBA0" };
+        return BIOMES.COASTAL.DUNES;
       } else if (moisture < 0.65) {
-        return { name: "littoral_scrub", color: "#A8AA80" }; // Renamed from shore_scrub
+        return BIOMES.COASTAL.LITTORAL_SCRUB;
       } else {
-        return { name: "salt_meadow", color: "#75A080" }; // Renamed from shore_meadow
+        return BIOMES.COASTAL.SALT_MEADOW;
       }
     }
     
@@ -1851,191 +1853,190 @@ export class TerrainGenerator {
     const tertiaryWidth = TERRAIN_OPTIONS.coastal.tertiaryZoneWidth;
     if (height < waterLevel + coastalZoneWidth + secondaryWidth + tertiaryWidth + coastVariation) {
       if (moisture < 0.3) {
-        return { name: "flats", color: "#C0B990" }; // Renamed from strand_plains
+        return BIOMES.COASTAL.FLATS;
       } else if (moisture < 0.6) {
-        return { name: "thicket", color: "#94A078" }; // Renamed from strand_scrub
+        return BIOMES.COASTAL.THICKET;
       } else {
-        return { name: "grove", color: "#5B8A65" }; // Renamed from strand_woodland
+        return BIOMES.COASTAL.GROVE;
       }
     }
 
     // RIVER SYSTEM - Adjusted thresholds for narrower features
     // Lakes (largest water bodies) - keep threshold the same but increase detection
     if (lakeValue > 0.25) {
-      if (height > 0.7) return { name: "mountain_lake", color: "#3A7FA0" };
-      return { name: "lake", color: "#4A91AA" };
+      if (height > 0.7) return BIOMES.WATER.MOUNTAIN_LAKE;
+      return BIOMES.WATER.LAKE;
     }
     
     // Rivers (medium water bodies) - make them narrower
-    if (riverValue > 0.30 && continentValue > 0.2) {  // Increased from 0.25
-      if (height > 0.75) return { name: "mountain_river", color: "#4A8FA0" }; 
-      return { name: "river", color: "#55AAC5" };
+    if (riverValue > 0.30 && continentValue > 0.2) {
+      if (height > 0.75) return BIOMES.WATER.MOUNTAIN_RIVER;
+      return BIOMES.WATER.RIVER;
     }
     
     // Streams (small water bodies) - make them narrower and less common
-    if (riverValue > 0.20 && continentValue > 0.2) {  // Increased from 0.17
-      return { name: "stream", color: "#65B2C0" };
+    if (riverValue > 0.20 && continentValue > 0.2) {
+      return BIOMES.WATER.STREAM;
     }
     
     // Make capillary streams even smaller
-    if (capillaryValue > 0.04) {  // Increased from 0.03 to make them less common
-      return { name: "rivulet", color: "#6AADB6" };
+    if (capillaryValue > 0.04) {
+      return BIOMES.WATER.RIVULET;
     }
     
     // WATER NETWORK - Add water network channels with priority between rivers and lakes
     if (waterNetworkValue > 0.2) {
-      // Scale the color based on depth
-      const blueIntensity = Math.min(0.9, 0.7 + waterNetworkValue * 0.3);
-      const colorComponent = Math.floor(170 + waterNetworkValue * 40);
-      return { 
-        name: "water_channel", 
-        color: `rgb(${Math.floor(colorComponent * 0.3)},${Math.floor(colorComponent * 0.6)},${colorComponent})` 
+      // Create a custom water channel with dynamic color based on depth
+      const waterChannelBiome = {
+        name: BIOMES.WATER.WATER_CHANNEL.name,
+        color: getWaterChannelColor(waterNetworkValue)
       };
+      return waterChannelBiome;
     }
     
     // 3. SCORCHED LANDS - Replaced with more volcanic-themed biomes
     if (scorchedValue > 0.2) {
       // Sharp transition to volcanic terrain
-      if (scorchedValue > 0.7) return { name: "active_volcano", color: "#9A2A20" }; // Darker red for better contrast
-      if (scorchedValue > 0.55) return { name: "volcanic_caldera", color: "#B54A30" }; // Slightly adjusted threshold
-      if (scorchedValue > 0.4) return { name: "volcanic_ash", color: "#706055" }; // Slightly adjusted threshold
-      return { name: "lava_fields", color: "#9D5A40" };
+      if (scorchedValue > 0.7) return BIOMES.SCORCHED.ACTIVE_VOLCANO;
+      if (scorchedValue > 0.55) return BIOMES.SCORCHED.VOLCANIC_CALDERA;
+      if (scorchedValue > 0.4) return BIOMES.SCORCHED.VOLCANIC_ASH;
+      return BIOMES.SCORCHED.LAVA_FIELDS;
     }
     
     // 4. CLIFF FEATURES
     if (isHighCliff) {
-      if (height > 0.9) return { name: "sheer_cliff", color: "#706860" }; // Dramatic sheer cliff
-      if (moisture > 0.6) return { name: "moss_cliff", color: "#5A6855" }; // Mossy cliff
-      return { name: "rocky_cliff", color: "#7A736B" }; // Standard cliff face
+      if (height > 0.9) return BIOMES.CLIFF.SHEER_CLIFF;
+      if (moisture > 0.6) return BIOMES.CLIFF.MOSS_CLIFF;
+      return BIOMES.CLIFF.ROCKY_CLIFF;
     }
     
     if (isCliff && height > 0.5) {
-      if (height > 0.75) return { name: "steep_slope", color: "#7D7468" };
-      return { name: "rugged_slope", color: "#82796D" };
+      if (height > 0.75) return BIOMES.CLIFF.STEEP_SLOPE;
+      return BIOMES.CLIFF.RUGGED_SLOPE;
     }
     
     // MOUNTAIN AND HIGH ELEVATION - enhanced snow features with more vibrant colors
     if (height > 0.92) {
       // High elevation, lower moisture threshold for snow
       if (moisture > TERRAIN_OPTIONS.snow.highMoistureThreshold) {
-        if (moisture > 0.8) return { name: "snow_cap", color: "#FFFFFF" };  // Pure white for snow caps
-        if (moisture > 0.7) return { name: "glacial_peak", color: "#F0FFFF" }; // New glacial peak biome
-        return { name: "alpine_snow", color: "#E8F0FF" }; // Bluer alpine snow
+        if (moisture > 0.8) return BIOMES.HIGH_MOUNTAIN.SNOW_CAP;
+        if (moisture > 0.7) return BIOMES.HIGH_MOUNTAIN.GLACIAL_PEAK;
+        return BIOMES.HIGH_MOUNTAIN.ALPINE_SNOW;
       }
       
       // NEW: Add more mountain variation for high peaks
-      if (moisture > 0.5) return { name: "snowy_peaks", color: "#D8E0EA" };
-      if (moisture > 0.4) return { name: "rocky_peaks", color: "#C0C0C8" }; // New variation
+      if (moisture > 0.5) return BIOMES.HIGH_MOUNTAIN.SNOWY_PEAKS;
+      if (moisture > 0.4) return BIOMES.HIGH_MOUNTAIN.ROCKY_PEAKS;
       
       // High elevation, low moisture = volcanic or barren
-      if (moisture < 0.15) return { name: "volcanic_peak", color: "#A03A25" }; // More restrictive for volcanoes
-      if (moisture < 0.25) return { name: "obsidian_ridge", color: "#55352F" }; // More restrictive
-      if (moisture < 0.35) return { name: "craggy_peaks", color: "#83756A" }; // New variation
+      if (moisture < 0.15) return BIOMES.HIGH_MOUNTAIN.VOLCANIC_PEAK;
+      if (moisture < 0.25) return BIOMES.HIGH_MOUNTAIN.OBSIDIAN_RIDGE;
+      if (moisture < 0.35) return BIOMES.HIGH_MOUNTAIN.CRAGGY_PEAKS;
       
-      return { name: "rugged_peaks", color: "#AAA0B5" };
+      return BIOMES.HIGH_MOUNTAIN.RUGGED_PEAKS;
     }
     
     // High elevation (85%+) - more snow and ice with brighter colors
     if (height > 0.85) {
       // High elevation snow at lower moisture thresholds
       if (moisture > TERRAIN_OPTIONS.snow.midMoistureThreshold) {
-        if (moisture > 0.85) return { name: "glacier", color: "#CCEEFF" }; // Brighter glacier
-        if (moisture > 0.75) return { name: "snow_field", color: "#E0F0FF" }; // Brighter snow field
-        return { name: "snowy_forest", color: "#A5B5C5" }; // Lighter snowy forest
+        if (moisture > 0.85) return BIOMES.MOUNTAIN.GLACIER;
+        if (moisture > 0.75) return BIOMES.MOUNTAIN.SNOW_FIELD;
+        return BIOMES.MOUNTAIN.SNOWY_FOREST;
       }
       
       // Medium moisture = mountain forest
-      if (moisture > 0.5) return { name: "mountain_forest", color: "#607D55" };
-      if (moisture > 0.45) return { name: "rocky_forest", color: "#6D7A60" }; // New variation
-      if (moisture > 0.4) return { name: "alpine_shrubs", color: "#747C63" }; // New variation
+      if (moisture > 0.5) return BIOMES.MOUNTAIN.MOUNTAIN_FOREST;
+      if (moisture > 0.45) return BIOMES.MOUNTAIN.ROCKY_FOREST;
+      if (moisture > 0.4) return BIOMES.MOUNTAIN.ALPINE_SHRUBS;
       
       // Low moisture = volcanic or barren
-      if (moisture < 0.2) return { name: "volcanic_slopes", color: "#8A4B3C" }; // More restrictive
-      if (moisture < 0.3) return { name: "barren_slopes", color: "#8E7F6E" }; // New variation
-      if (moisture < 0.4) return { name: "mountain_scrub", color: "#7D8766" };
+      if (moisture < 0.2) return BIOMES.MOUNTAIN.VOLCANIC_SLOPES;
+      if (moisture < 0.3) return BIOMES.MOUNTAIN.BARREN_SLOPES;
+      if (moisture < 0.4) return BIOMES.MOUNTAIN.MOUNTAIN_SCRUB;
       
-      return { name: "bare_mountain", color: "#A09085" };
+      return BIOMES.MOUNTAIN.BARE_MOUNTAIN;
     }
     
     // Upper mid-elevation (78%+) - added more snow at this level too
     if (height > 0.78) {
       // Upper mid-elevation snow and ice - increased visibility
       if (moisture > TERRAIN_OPTIONS.snow.lowMoistureThreshold) {
-        return { name: "snow_patched_hills", color: "#D5E5F5" }; // Brighter snow patches
+        return BIOMES.HIGH_HILLS.SNOW_PATCHED_HILLS;
       }
       
       // Add new category for high moisture but not quite snow
-      if (moisture > 0.7) return { name: "foggy_peaks", color: "#B0C0D0" }; // New foggy mountains biome
+      if (moisture > 0.7) return BIOMES.HIGH_HILLS.FOGGY_PEAKS;
       
-      if (moisture < 0.25) return { name: "rocky_slopes", color: "#A58775" }; // Made lighter
-      if (moisture > 0.8) return { name: "alpine_meadow", color: "#8DAD70" }; // Made brighter
-      if (moisture > 0.65) return { name: "highland_forest", color: "#5D7B4A" }; // Made brighter
-      if (moisture > 0.5) return { name: "highland", color: "#7B8F5D" }; // Made brighter
-      if (moisture > 0.35) return { name: "rocky_highland", color: "#8D9075" }; // Made lighter
+      if (moisture < 0.25) return BIOMES.HIGH_HILLS.ROCKY_SLOPES;
+      if (moisture > 0.8) return BIOMES.HIGH_HILLS.ALPINE_MEADOW;
+      if (moisture > 0.65) return BIOMES.HIGH_HILLS.HIGHLAND_FOREST;
+      if (moisture > 0.5) return BIOMES.HIGH_HILLS.HIGHLAND;
+      if (moisture > 0.35) return BIOMES.HIGH_HILLS.ROCKY_HIGHLAND;
       
-      return { name: "mesa", color: "#B09579" }; // Made lighter for better visibility
+      return BIOMES.HIGH_HILLS.MESA;
     }
     
     // MID-ELEVATION TERRAIN (58-78%) - More visible distinctions
     if (height > 0.58) {
       // Also add snow for extremely wet mid-elevation areas
-      if (moisture > 0.92) return { name: "mountain_frost", color: "#C5D5E5" }; // New frost biome
+      if (moisture > 0.92) return BIOMES.MID_ELEVATION.MOUNTAIN_FROST;
       
-      if (moisture > 0.85) return { name: "ancient_forest", color: "#29543A" }; // Ancient primal forest
-      if (moisture > 0.75) return { name: "tropical_rainforest", color: "#306B44" }; // Dense rainforest
-      if (moisture > 0.62) return { name: "temperate_forest", color: "#3D7A4D" }; // Temperate forest
-      if (moisture > 0.58) return { name: "mountain_transition", color: "#5A7B59" }; // NEW transition biome
-      if (moisture > 0.5) return { name: "enchanted_grove", color: "#4E8956" }; // Magical/enchanted grove
-      if (moisture > 0.4) return { name: "woodland", color: "#5D9555" }; // Woodland
-      if (moisture > 0.3) return { name: "shrubland", color: "#8BA662" }; // Shrubland
-      if (moisture > 0.2) return { name: "dry_shrubland", color: "#A8A76C" }; // Dry shrubland
-      if (moisture > 0.12) return { name: "scrubland", color: "#B9A77C" }; // Scrubland
-      return { name: "badlands", color: "#BC9668" }; // Badlands
+      if (moisture > 0.85) return BIOMES.MID_ELEVATION.ANCIENT_FOREST;
+      if (moisture > 0.75) return BIOMES.MID_ELEVATION.TROPICAL_RAINFOREST;
+      if (moisture > 0.62) return BIOMES.MID_ELEVATION.TEMPERATE_FOREST;
+      if (moisture > 0.58) return BIOMES.MID_ELEVATION.MOUNTAIN_TRANSITION;
+      if (moisture > 0.5) return BIOMES.MID_ELEVATION.ENCHANTED_GROVE;
+      if (moisture > 0.4) return BIOMES.MID_ELEVATION.WOODLAND;
+      if (moisture > 0.3) return BIOMES.MID_ELEVATION.SHRUBLAND;
+      if (moisture > 0.2) return BIOMES.MID_ELEVATION.DRY_SHRUBLAND;
+      if (moisture > 0.12) return BIOMES.MID_ELEVATION.SCRUBLAND;
+      return BIOMES.MID_ELEVATION.BADLANDS;
     }
     
     if (height > 0.5) {
-      if (moisture > 0.85) return { name: "fey_forest", color: "#2E5D40" }; // Magical/fey forest
-      if (moisture > 0.75) return { name: "deep_forest", color: "#356848" }; // Deep mysterious forest
-      if (moisture > 0.65) return { name: "dense_forest", color: "#3A7446" }; // Dense forest
-      if (moisture > 0.55) return { name: "forest", color: "#407B4C" }; // Regular forest
-      if (moisture > 0.45) return { name: "light_forest", color: "#558759" }; // Light forest
-      if (moisture > 0.35) return { name: "scattered_trees", color: "#6A9861" }; // Scattered trees
-      if (moisture > 0.25) return { name: "prairie", color: "#91A86E" }; // Prairie
-      if (moisture > 0.15) return { name: "savanna", color: "#B4A878" }; // Savanna
-      return { name: "dry_savanna", color: "#C2AA71" }; // Dry savanna
+      if (moisture > 0.85) return BIOMES.LOWER_MID_ELEVATION.FEY_FOREST;
+      if (moisture > 0.75) return BIOMES.LOWER_MID_ELEVATION.DEEP_FOREST;
+      if (moisture > 0.65) return BIOMES.LOWER_MID_ELEVATION.DENSE_FOREST;
+      if (moisture > 0.55) return BIOMES.LOWER_MID_ELEVATION.FOREST;
+      if (moisture > 0.45) return BIOMES.LOWER_MID_ELEVATION.LIGHT_FOREST;
+      if (moisture > 0.35) return BIOMES.LOWER_MID_ELEVATION.SCATTERED_TREES;
+      if (moisture > 0.25) return BIOMES.LOWER_MID_ELEVATION.PRAIRIE;
+      if (moisture > 0.15) return BIOMES.LOWER_MID_ELEVATION.SAVANNA;
+      return BIOMES.LOWER_MID_ELEVATION.DRY_SAVANNA;
     }
     
     // LOWER ELEVATION TERRAIN - expanded variety
     if (height > 0.4) {
-      if (moisture > 0.8) return { name: "swamp", color: "#4E6855" }; // Swamp
-      if (moisture > 0.7) return { name: "marsh", color: "#5E7959" }; // Marsh
-      if (moisture > 0.6) return { name: "wet_grassland", color: "#5F864A" }; // Wet grassland
-      if (moisture > 0.5) return { name: "grassland", color: "#6B9850" }; // Grassland
-      if (moisture > 0.4) return { name: "meadow", color: "#7BA758" }; // Meadow
-      if (moisture > 0.3) return { name: "plains", color: "#9CB568" }; // Plains
-      if (moisture > 0.2) return { name: "dry_grassland", color: "#B1B173" }; // Dry grassland
-      if (moisture > 0.12) return { name: "arid_plains", color: "#C0A97A" }; // Arid plains
-      return { name: "desert_scrub", color: "#CCAD6E" }; // Desert scrub
+      if (moisture > 0.8) return BIOMES.LOW_ELEVATION.SWAMP;
+      if (moisture > 0.7) return BIOMES.LOW_ELEVATION.MARSH;
+      if (moisture > 0.6) return BIOMES.LOW_ELEVATION.WET_GRASSLAND;
+      if (moisture > 0.5) return BIOMES.LOW_ELEVATION.GRASSLAND;
+      if (moisture > 0.4) return BIOMES.LOW_ELEVATION.MEADOW;
+      if (moisture > 0.3) return BIOMES.LOW_ELEVATION.PLAINS;
+      if (moisture > 0.2) return BIOMES.LOW_ELEVATION.DRY_GRASSLAND;
+      if (moisture > 0.12) return BIOMES.LOW_ELEVATION.ARID_PLAINS;
+      return BIOMES.LOW_ELEVATION.DESERT_SCRUB;
     }
     
     // LOWEST LANDS - expanded desert types
     if (height > 0.32) {
-      if (moisture > 0.8) return { name: "bog", color: "#4D5E50" }; // Bog
-      if (moisture > 0.7) return { name: "wetland", color: "#5A6A55" }; // Wetland
-      if (moisture > 0.6) return { name: "moor", color: "#657355" }; // Moor
-      if (moisture > 0.5) return { name: "lowland", color: "#768355" }; // Lowland
-      if (moisture > 0.4) return { name: "dry_plains", color: "#8D9565" }; // Dry plains
-      if (moisture > 0.3) return { name: "steppe", color: "#A6A072" }; // Steppe
-      if (moisture > 0.2) return { name: "chalky_plains", color: "#C8BC90" }; // Chalky/dusty plains
-      if (moisture > 0.1) return { name: "desert", color: "#E8D7A7" }; // Desert
-      return { name: "barren_desert", color: "#F0E3B2" }; // Barren desert
+      if (moisture > 0.8) return BIOMES.LOWEST_ELEVATION.BOG;
+      if (moisture > 0.7) return BIOMES.LOWEST_ELEVATION.WETLAND;
+      if (moisture > 0.6) return BIOMES.LOWEST_ELEVATION.MOOR;
+      if (moisture > 0.5) return BIOMES.LOWEST_ELEVATION.LOWLAND;
+      if (moisture > 0.4) return BIOMES.LOWEST_ELEVATION.DRY_PLAINS;
+      if (moisture > 0.3) return BIOMES.LOWEST_ELEVATION.STEPPE;
+      if (moisture > 0.2) return BIOMES.LOWEST_ELEVATION.CHALKY_PLAINS;
+      if (moisture > 0.1) return BIOMES.LOWEST_ELEVATION.DESERT;
+      return BIOMES.LOWEST_ELEVATION.BARREN_DESERT;
     }
     
     // SPECIAL BOTTOM LANDS
-    if (moisture > 0.7) return { name: "mudflats", color: "#5F6855" }; // Mudflats
-    if (moisture > 0.5) return { name: "delta", color: "#6A7355" }; // Delta
-    if (moisture > 0.3) return { name: "salt_flat", color: "#D0C9AA" }; // Salt flat
-    return { name: "dry_basin", color: "#E5D6A9" }; // Dry basin
+    if (moisture > 0.7) return BIOMES.BOTTOM_LANDS.MUDFLATS;
+    if (moisture > 0.5) return BIOMES.BOTTOM_LANDS.DELTA;
+    if (moisture > 0.3) return BIOMES.BOTTOM_LANDS.SALT_FLAT;
+    return BIOMES.BOTTOM_LANDS.DRY_BASIN;
   }
 
   // Add a method to clear the cache
