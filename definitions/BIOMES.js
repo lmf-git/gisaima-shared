@@ -9,10 +9,10 @@ export const BIOMES = {
   
   // OCEAN BIOMES
   OCEAN: {
-    DEEP_OCEAN: { name: "deep_ocean", color: "#0E3B59" },
-    OCEAN: { name: "ocean", color: "#1A4F76" },
-    SEA: { name: "sea", color: "#2D6693" },
-    SHALLOWS: { name: "shallows", color: "#5d99b8" }
+    DEEP_OCEAN: { name: "deep_ocean", color: "#0E3B59", water: true },
+    OCEAN: { name: "ocean", color: "#1A4F76", water: true },
+    SEA: { name: "sea", color: "#2D6693", water: true },
+    SHALLOWS: { name: "shallows", color: "#5d99b8", water: true }
   },
   
   // COASTAL BIOMES
@@ -31,13 +31,13 @@ export const BIOMES = {
   
   // WATER FEATURES
   WATER: {
-    MOUNTAIN_LAKE: { name: "mountain_lake", color: "#3A7FA0" },
-    LAKE: { name: "lake", color: "#4A91AA" },
-    MOUNTAIN_RIVER: { name: "mountain_river", color: "#4A8FA0" },
-    RIVER: { name: "river", color: "#55AAC5" },
-    STREAM: { name: "stream", color: "#65B2C0" },
-    RIVULET: { name: "rivulet", color: "#6AADB6" },
-    WATER_CHANNEL: { name: "water_channel", color: "#4A80AA" }, // Base color, will be calculated dynamically
+    MOUNTAIN_LAKE: { name: "mountain_lake", color: "#3A7FA0", water: true },
+    LAKE: { name: "lake", color: "#4A91AA", water: true },
+    MOUNTAIN_RIVER: { name: "mountain_river", color: "#4A8FA0", water: true },
+    RIVER: { name: "river", color: "#55AAC5", water: true },
+    STREAM: { name: "stream", color: "#65B2C0", water: true },
+    RIVULET: { name: "rivulet", color: "#6AADB6", water: true },
+    WATER_CHANNEL: { name: "water_channel", color: "#4A80AA", water: true }, // Base color, will be calculated dynamically
   },
   
   // VOLCANIC/SCORCHED BIOMES
