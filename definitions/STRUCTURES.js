@@ -12,6 +12,18 @@ export const STRUCTURES = {
       { id: 'WOODEN_STICKS', quantity: 8 },
       { id: 'STONE_PIECES', quantity: 6 }
     ],
+    features: [
+      {
+        name: 'Spawn Point',
+        description: 'Allows new players to join the game',
+        icon: '🏕️'
+      },
+      {
+        name: 'Basic Storage',
+        description: 'Stores resources and items',
+        icon: '📦'
+      }
+    ],
   },
   'monster_lair': {
     name: "Monster Lair",
