@@ -1,5 +1,3 @@
-import { build } from "$service-worker";
-
 export const STRUCTURES = {
   'spawn': {
     description: "Generic Spawn",
