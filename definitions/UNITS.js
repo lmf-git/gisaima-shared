@@ -8,37 +8,202 @@ const UNITS = {
         power: 2,
         icon: 'player'
     },
-
-    // Player Units - Basic units
-    'warrior': {
-        name: 'Warrior',
-        description: "Basic melee fighter with sword and shield",
+    
+    'human_warrior': {
+        name: 'Footman',
+        description: "Armored sword-wielder trained in formation combat",
+        category: 'player',
+        type: 'warrior',
+        power: 1.2,
+        timePerUnit: 1.1,
+        icon: 'sword',
+        cost: { WOODEN_STICKS: 2, IRON_SHARDS: 1 },
+        recruitment: {
+        sortOrder: 11,
+        tooltip: "Sturdy and disciplined"
+        }
+    },
+    'human_scout': {
+        name: 'Pathfinder',
+        description: "Quick runner, ideal for early recon",
+        category: 'player',
+        type: 'scout',
+        power: 0.6,
+        timePerUnit: 0.75,
+        icon: 'boots',
+        cost: { WOODEN_STICKS: 1, LEATHER: 2 },
+        requirements: {
+        structureLevel: 1
+        },
+        recruitment: {
+        sortOrder: 21,
+        tooltip: "Swift explorer with decent range"
+        }
+    },
+    'goblin_warrior': {
+        name: 'Rager',
+        description: "Wild axe-wielder with low armor but high aggression",
         category: 'player',
         type: 'warrior',
         power: 1,
-        timePerUnit: 1, // in ticks (was 60 seconds)
-        icon: 'sword',
-        cost: { WOODEN_STICKS: 2, STONE_PIECES: 1 },
+        timePerUnit: 0.9,
+        icon: 'axe',
+        cost: { WOODEN_STICKS: 1, BONE: 2 },
         recruitment: {
-            sortOrder: 10,
-            tooltip: "Basic frontline fighter"
+        sortOrder: 12,
+        tooltip: "Cheap and fierce"
         }
     },
-    'scout': {
-        name: 'Scout',
-        description: "Fast unit with high visibility",
+    'goblin_scout': {
+        name: 'Sneakblade',
+        description: "Stealthy scout with backstab potential",
+        category: 'player',
+        type: 'scout',
+        power: 0.7,
+        timePerUnit: 0.6,
+        icon: 'dagger',
+        cost: { LEATHER: 1, BONE: 1 },
+        requirements: {
+        structureLevel: 1
+        },
+        recruitment: {
+        sortOrder: 22,
+        tooltip: "Quick, quiet, and deadly"
+        }
+    },
+    'elf_warrior': {
+        name: 'Bladelord',
+        description: "Graceful fighter with dual blades",
+        category: 'player',
+        type: 'warrior',
+        power: 1.4,
+        timePerUnit: 1.2,
+        icon: 'blades',
+        cost: { WOODEN_STICKS: 2, MOON_SILVER: 1 },
+        recruitment: {
+        sortOrder: 13,
+        tooltip: "Fast, elegant melee unit"
+        }
+    },
+    'elf_scout': {
+        name: 'Windseer',
+        description: "Eagle-eyed archer with long sight",
+        category: 'player',
+        type: 'scout',
+        power: 0.8,
+        timePerUnit: 0.8,
+        icon: 'eye',
+        cost: { FEATHER: 1, WOODEN_STICKS: 2 },
+        requirements: {
+        structureLevel: 1
+        },
+        recruitment: {
+        sortOrder: 23,
+        tooltip: "Excellent visibility and range"
+        }
+    },
+    'fairy_warrior': {
+        name: 'Thorn Knight',
+        description: "Tiny but magical melee defender",
+        category: 'player',
+        type: 'warrior',
+        power: 0.9,
+        timePerUnit: 0.8,
+        icon: 'thorn',
+        cost: { GLOW_DUST: 2, PETAL: 2 },
+        recruitment: {
+        sortOrder: 14,
+        tooltip: "Magic-resistant tiny tank"
+        }
+    },
+    'fairy_scout': {
+        name: 'Glimmerwing',
+        description: "Flies quickly and sees across wide ranges",
+        category: 'player',
+        type: 'scout',
+        power: 0.4,
+        timePerUnit: 0.5,
+        icon: 'wing',
+        cost: { GLOW_DUST: 1, FEATHER: 2 },
+        requirements: {
+        structureLevel: 1
+        },
+        recruitment: {
+        sortOrder: 24,
+        tooltip: "Fastest scout available"
+        }
+    },
+    'dwarf_warrior': {
+        name: 'Stoneguard',
+        description: "Heavy axe and shield user, excels in defense",
+        category: 'player',
+        type: 'warrior',
+        power: 1.5,
+        timePerUnit: 1.3,
+        icon: 'hammer',
+        cost: { STONE_PIECES: 2, IRON_SHARDS: 2 },
+        recruitment: {
+        sortOrder: 15,
+        tooltip: "Tough and slow defender"
+        }
+    },
+    'dwarf_scout': {
+        name: 'Tunnel Scout',
+        description: "Short-range, underground recon unit",
         category: 'player',
         type: 'scout',
         power: 0.5,
-        timePerUnit: 0.75, // in ticks (was 45 seconds)
-        icon: 'bow',
-        cost: { WOODEN_STICKS: 1, LEATHER: 1 },
+        timePerUnit: 0.85,
+        icon: 'pick',
+        cost: { STONE_PIECES: 1, TORCH: 1 },
         requirements: {
-            structureLevel: 1
+        structureLevel: 1
         },
         recruitment: {
-            sortOrder: 20,
-            tooltip: "Good for exploration"
+        sortOrder: 25,
+        tooltip: "Best in underground terrain"
+        }
+    },
+    'healer': {
+        name: 'Healer',
+        description: "Supports allies by restoring their strength",
+        category: 'player',
+        type: 'support',
+        power: 0.2,
+        timePerUnit: 1.2,
+        icon: 'cross',
+        cost: { HERB: 2, WATER: 1 },
+        recruitment: {
+        sortOrder: 30,
+        tooltip: "Restores nearby units slowly"
+        }
+    },
+    'shaman': {
+        name: 'Shaman',
+        description: "Casts weak offensive spells and buffs",
+        category: 'player',
+        type: 'support',
+        power: 0.8,
+        timePerUnit: 1.5,
+        icon: 'staff',
+        cost: { HERB: 1, BONE: 1, GLOW_DUST: 1 },
+        recruitment: {
+        sortOrder: 31,
+        tooltip: "Magic support unit"
+        }
+    },
+    'siege_engineer': {
+        name: 'Engineer',
+        description: "Builds and operates siege equipment",
+        category: 'player',
+        type: 'support',
+        power: 1,
+        timePerUnit: 2,
+        icon: 'gear',
+        cost: { IRON_SHARDS: 3, WOODEN_STICKS: 3 },
+        recruitment: {
+        sortOrder: 40,
+        tooltip: "Essential for breaching defenses"
         }
     },
 

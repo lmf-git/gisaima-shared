@@ -84,6 +84,162 @@ export const ITEMS = {
     rarity: 'uncommon',
     description: 'Magical shard used for enchantments'
   },
+    // Craftable items
+    IRON_ORE: {
+      name: 'Iron Ore',
+      type: 'resource',
+      rarity: 'uncommon',
+      description: 'Metal-bearing rock found in mountains',
+      biomes: ['mountains']
+    },
+    MOUNTAIN_CRYSTAL: {
+      name: 'Mountain Crystal',
+      type: 'gem',
+      rarity: 'rare',
+      description: 'Beautiful crystal formed deep within mountains',
+      biomes: ['mountains']
+    },
+  
+    // Desert items
+    SAND_CRYSTAL: {
+      name: 'Sand Crystal',
+      type: 'gem',
+      rarity: 'uncommon',
+      description: 'Formed from heated desert sands',
+      biomes: ['desert']
+    },
+    CACTUS_FRUIT: {
+      name: 'Cactus Fruit',
+      type: 'resource',
+      rarity: 'common',
+      description: 'Juicy fruit that grows on desert cacti',
+      biomes: ['desert']
+    },
+  
+    // River items
+    FRESH_WATER: {
+      name: 'Fresh Water',
+      type: 'resource',
+      rarity: 'common',
+      description: 'Clean water from flowing rivers',
+      biomes: ['rivers']
+    },
+    FISH: {
+      name: 'Fish',
+      type: 'resource',
+      rarity: 'common',
+      description: 'Freshwater fish from rivers and lakes',
+      biomes: ['rivers']
+    },
+  
+    // Oasis items
+    PURE_WATER: {
+      name: 'Pure Water',
+      type: 'resource',
+      rarity: 'uncommon',
+      description: 'Exceptionally clean water from oasis springs',
+      biomes: ['oasis']
+    },
+    EXOTIC_FRUIT: {
+      name: 'Exotic Fruit',
+      type: 'resource',
+      rarity: 'uncommon',
+      description: 'Rare fruits growing around water sources in dry areas',
+      biomes: ['oasis']
+    },
+  
+    // Ruins items
+    ANCIENT_FRAGMENT: {
+      name: 'Ancient Fragment',
+      type: 'artifact',
+      rarity: 'rare',
+      description: 'Piece of a forgotten civilization',
+      biomes: ['ruins']
+    },
+    BROKEN_TOOL: {
+      name: 'Broken Tool',
+      type: 'junk',
+      rarity: 'common',
+      description: 'Damaged tool from a bygone era',
+      biomes: ['ruins']
+    },
+  
+    // Wasteland items
+    SCRAP_METAL: {
+      name: 'Scrap Metal',
+      type: 'resource',
+      rarity: 'common',
+      description: 'Salvageable metal pieces',
+      biomes: ['wastes']
+    },
+    STRANGE_DEVICE: {
+      name: 'Strange Device',
+      type: 'artifact',
+      rarity: 'uncommon',
+      description: 'Peculiar machinery with unknown purpose',
+      biomes: ['wastes']
+    },
+  
+    // New monster drop items
+    BONE_FRAGMENT: {
+      name: 'Bone Fragment',
+      type: 'resource',
+      rarity: 'common',
+      description: 'A fragment of bone from a defeated monster',
+      monsterDrop: true
+    },
+    CRUDE_WEAPON: {
+      name: 'Crude Weapon',
+      type: 'weapon',
+      rarity: 'common',
+      description: 'A simple weapon dropped by a monster',
+      power: 3, // Battle power contribution
+      monsterDrop: true
+    },
+    MONSTER_HIDE: {
+      name: 'Monster Hide',
+      type: 'resource',
+      rarity: 'uncommon',
+      description: 'Tough hide from a monster',
+      monsterDrop: true
+    },
+    ANCIENT_COIN: {
+      name: 'Ancient Coin',
+      type: 'treasure',
+      rarity: 'uncommon',
+      description: 'Old coin from a forgotten civilization',
+      monsterDrop: true
+    },
+    MONSTER_TOOTH: {
+      name: 'Monster Tooth',
+      type: 'trophy',
+      rarity: 'uncommon',
+      description: 'Sharp tooth taken from a slain creature',
+      power: 2, // Battle power contribution
+      monsterDrop: true
+    },
+    MONSTER_BLOOD: {
+      name: 'Monster Blood',
+      type: 'alchemy',
+      rarity: 'rare',
+      description: 'Unusual blood with magical properties',
+      monsterDrop: true
+    },
+    RARE_METALS: {
+      name: 'Rare Metals',
+      type: 'resource',
+      rarity: 'rare',
+      description: 'Uncommon metal fragments with special properties',
+      monsterDrop: true
+    },
+    PRIMAL_ESSENCE: {
+      name: 'Primal Essence',
+      type: 'gem',
+      rarity: 'epic',
+      description: 'Crystallized magical energy from a powerful creature',
+      power: 15, // Battle power contribution
+      monsterDrop: true
+    },
   IRON: {
     name: 'Iron',
     type: 'resource',
