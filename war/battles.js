@@ -30,8 +30,19 @@ function calculateUnitPower(group) {
       // Players have base power of 10
       power += 10;
     } else {
-      // Regular units have base power of 1
-      power += 1;
+      // Use power from UNITS definition if available, otherwise default to 1
+      const unitType = unit.type || unit.unitType;
+      let unitPower = 1; // Default power
+      
+      // Search for matching unit in UNITS definition
+      for (const key in UNITS) {
+        if (UNITS[key].type === unitType || key === unitType) {
+          unitPower = UNITS[key].power || 1;
+          break;
+        }
+      }
+      
+      power += unitPower;
     }
     
     // Add power from unit's level if available
