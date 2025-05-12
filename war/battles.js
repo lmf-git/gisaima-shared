@@ -12,8 +12,6 @@ export function calculateGroupPower(group) {
   // Additional power from items
   const itemPower = calculateItemPower(group);
   
-  console.log(`Group ${group.id || 'unknown'} power: units=${unitPower}, items=${itemPower}, total=${unitPower + itemPower}`);
-  
   // Total group power is sum of unit power and item power
   return unitPower + itemPower;
 }
