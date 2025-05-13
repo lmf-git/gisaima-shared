@@ -26,10 +26,6 @@ function calculateUnitPower(group) {
   // Sum up power for each unit
   for (const unitId in units) {
     const unit = units[unitId];
-    if (unit.type === 'player') {
-      // Players have base power of 10
-      power += 10;
-    } else {
       // Use power from UNITS definition if available, otherwise default to 1
       const unitType = unit.type || unit.unitType;
       let unitPower = 1; // Default power
@@ -43,7 +39,6 @@ function calculateUnitPower(group) {
       }
       
       power += unitPower;
-    }
     
     // Add power from unit's level if available
     if (unit.level) {
