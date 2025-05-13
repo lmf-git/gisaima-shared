@@ -1,6 +1,38 @@
 import UNITS from "../definitions/UNITS.js";
 import { getItemPower } from "../definitions/ITEMS.js";
 
+/**
+ * Critical Hit System Documentation
+ * ---------------------------------
+ * Critical hits serve multiple purposes in PvP combat:
+ * 
+ * 1. Stalemate Prevention:
+ *    - Critical hit chance increases each battle tick (5% per tick up to 40%)
+ *    - 1v1 duels get +10% critical chance after tick 3
+ *    - This ensures battles eventually reach a conclusion
+ * 
+ * 2. Advantage System:
+ *    - Landing a critical hit reduces effective attrition by 1.5
+ *    - Combo criticals (multiple players) get additional 0.5 reduction
+ *    - This protects players who land critical hits from being killed
+ * 
+ * 3. Tie-Breaking:
+ *    - When both sides would normally be defeated (draw), critical hits determine winner
+ *    - Side with critical hits wins over side without critical hits
+ *    - This prevents mutual defeats in balanced PvP situations
+ * 
+ * 4. Multi-Player PvP Combat (e.g. 2v2):
+ *    - Players are paired with specific opponents via engagement system
+ *    - Each player rolls for critical hits against their paired opponent
+ *    - When multiple players on same side land critical hits:
+ *      a) They receive "combo critical" status (+0.5 protection)
+ *      b) This rewards team coordination
+ *    - Equal teams (e.g. 2v2) have balanced base chances
+ *    - Unequal teams get advantages/disadvantages proportional to number difference
+ * 
+ * Critical hits apply only to player vs player combat and enhance the tactical
+ * depth of PvP engagements, rewarding player skill and creating decisive outcomes.
+ */
 
 // Calculate power for an individual group
 export function calculateGroupPower(group) {
@@ -334,6 +366,7 @@ function createEngagementPairs(attackers, defenders) {
   const remainingDefenders = [...defenders];
   
   // First pass: Try to match players 1-to-1 until one side is exhausted
+  // For example, in a 2v2 battle, this would pair each player with an opponent
   while (remainingAttackers.length > 0 && remainingDefenders.length > 0) {
     // Get a random attacker and defender
     const attackerIndex = Math.floor(Math.random() * remainingAttackers.length);
@@ -346,6 +379,7 @@ function createEngagementPairs(attackers, defenders) {
   }
   
   // Second pass: If there are leftover attackers, pair them with already paired defenders
+  // For example, in a 3v2 battle, one attacker would "gang up" on a defender
   if (remainingAttackers.length > 0 && defenders.length > 0) {
     remainingAttackers.forEach(attacker => {
       // Choose a random defender from the original list to "gang up" on
