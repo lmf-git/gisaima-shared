@@ -105,6 +105,22 @@ export function calculateAttrition(sidePower, sideRatio, opposingRatio) {
   // When opposingRatio is 0.95+ (extreme dominance by opponent), high chance of casualties
   const zeroAttritionChance = Math.min(0.9, (1 - powerDominance) * 0.95);
   
+  // IMPROVED: Allow dominant sides to sometimes avoid casualties
+  // If this side is clearly dominant (high ratio > 0.7) and facing a much weaker opponent (ratio < 0.3)
+  if (sideRatio > 0.7 && opposingRatio < 0.3) {
+    // Higher chance to avoid casualties when dominance is greater
+    const dominanceDelta = sideRatio - opposingRatio;
+    const noCasualtyChance = Math.min(0.8, dominanceDelta * 0.9); // 80% max chance for no casualties
+    
+    if (Math.random() < noCasualtyChance) {
+      console.log(`Dominant side with ${sideRatio.toFixed(2)} power ratio avoids casualties due to overwhelming advantage`);
+      return 0;
+    }
+    
+    console.log(`Dominant side with ${sideRatio.toFixed(2)} power ratio takes minimal casualties`);
+    return 1; // Minimum casualties when dominant side does take damage
+  }
+  
   // FIXED: Only allow zero attrition for weaker sides (lower ratio = weaker)
   // This means a powerful side can't avoid casualties when facing a weaker opponent
   if (opposingRatio > 0.75 && sideRatio < 0.25 && Math.random() < zeroAttritionChance) {
