@@ -230,6 +230,13 @@ export function processPvPCombat(side1, side2, tickCount) {
     // Ensure chance is within bounds
     critChance = Math.max(0.05, Math.min(0.7, critChance));
     
+    // ENHANCED: In close combat situations, increase critical hit chances to help break ties
+    // This helps prevent draws in PvP where both players die
+    if (side1Players.length === 1 && side2Players.length === 1 && tickCount >= 3) {
+      critChance += 0.1; // Add 10% to crit chance in protracted 1v1 duels
+      console.log(`Duel critical chance increased for ${player.unit.displayName || player.id} to ${critChance.toFixed(2)}`);
+    }
+    
     // Roll for critical hit
     if (Math.random() < critChance) {
       player.unit.criticalHit = true;
@@ -403,16 +410,17 @@ export function selectUnitsForCasualties(units, attritionCount) {
       effectiveAttrition = Math.min(3, effectiveAttrition + 0.5);
     }
     
-    // Critical hits significantly increase damage in PvP
+    // CRITICAL FIX: Players who land critical hits get significant protection from attrition
     if (criticalHit) {
-      // Regular critical hit forces at least 1 damage
-      if (effectiveAttrition < 1) effectiveAttrition = 1;
+      // Critical hit gives major protection from attrition
+      effectiveAttrition = Math.max(0, effectiveAttrition - 1.5);
       
-      // Combo critical is even more effective
+      // Combo critical gives even more protection
       if (comboCritical) {
-        console.log(`Combo critical! Player facing increased attrition`);
-        effectiveAttrition += 1;
+        effectiveAttrition = Math.max(0, effectiveAttrition - 0.5);
       }
+      
+      console.log(`Critical hit advantage: Player ${playerUnit.displayName || playerUnit.id} reduces effective attrition from ${remainingAttrition} to ${effectiveAttrition}`);
     }
     
     // Log the special PvP circumstance with all factors
@@ -421,10 +429,10 @@ export function selectUnitsForCasualties(units, attritionCount) {
     // Determine if player is killed
     let playerKilled = false;
     
-    // Critical hits always cause casualties
-    if (criticalHit) {
-      console.log(`Player defeated by critical hit in PvP combat!`);
-      playerKilled = true;
+    // Critical hits now protect instead of causing casualties
+    if (criticalHit && effectiveAttrition < 2) {
+      console.log(`Player ${playerUnit.displayName || playerUnit.id} survives due to critical hit advantage!`);
+      playerKilled = false;
     }
     // Higher effective attrition threshold kills
     else if (effectiveAttrition >= 2) {
