@@ -5,7 +5,7 @@ const UNITS = {
         description: "The player's own character",
         category: 'player',
         type: 'player',
-        power: 20,
+        power: 10,
         icon: 'player'
     },
     
