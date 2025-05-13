@@ -157,6 +157,217 @@ export function calculateAttrition(sidePower, sideRatio, opposingRatio) {
 }
 
 /**
+ * Specialized function for player vs player combat mechanics
+ * Determines critical hits and other PvP-specific effects
+ * @param {Object} side1 - The first combat side
+ * @param {Object} side2 - The second combat side
+ * @param {number} tickCount - Current battle tick count
+ * @returns {Object} Modified side objects with PvP combat flags
+ */
+export function processPvPCombat(side1, side2, tickCount) {
+  // Detect if sides contain player units
+  const side1Players = extractSoloPlayerUnits(side1);
+  const side2Players = extractSoloPlayerUnits(side2);
+  
+  // Skip if either side has no players
+  if (side1Players.length === 0 || side2Players.length === 0) {
+    return { side1, side2 };
+  }
+  
+  console.log(`PvP combat detected: ${side1Players.length} players vs ${side2Players.length} players`);
+  
+  // Mark all units as being in PvP combat
+  side1Players.forEach(player => {
+    player.unit.pvpCombat = true;
+    // Store number of opposing players to adjust mechanics
+    player.unit.opposingPlayerCount = side2Players.length;
+  });
+  
+  side2Players.forEach(player => {
+    player.unit.pvpCombat = true;
+    // Store number of opposing players to adjust mechanics
+    player.unit.opposingPlayerCount = side1Players.length;
+  });
+  
+  // TEAM ADVANTAGE: Check for team size advantage
+  const side1TeamAdvantage = side1Players.length > side2Players.length;
+  const side2TeamAdvantage = side2Players.length > side1Players.length;
+  
+  // Calculate base critical hit chance for this tick
+  // As battle progresses, critical hits become more likely to resolve stalemates
+  const baseCritChance = Math.min(0.4, 0.05 * tickCount); // 5% per tick, up to 40%
+  
+  // MULTI-PLAYER TARGETING: Assign targets to create engagement pairs
+  // This simulates players targeting specific opponents rather than random attacks
+  const engagementPairs = createEngagementPairs(side1Players, side2Players);
+  
+  // Process critical hits for side 1 players based on their assigned targets
+  side1Players.forEach(player => {
+    // Find this player's target if one exists
+    const targetInfo = engagementPairs.find(pair => pair.attacker.id === player.id);
+    const target = targetInfo?.defender;
+    
+    // Calculate critical hit chance based on multiple factors
+    let critChance = baseCritChance;
+    
+    // Level advantage modifier
+    const levelAdvantage = target ? 
+      (player.unit.level || 1) - (target.unit.level || 1) : 0;
+    critChance += levelAdvantage * 0.05;
+    
+    // Team advantage modifier - having more teammates makes critical hits more likely
+    if (side1TeamAdvantage) {
+      const teamBonus = 0.05 * Math.min(3, side1Players.length - side2Players.length);
+      critChance += teamBonus;
+      player.unit.teamAdvantage = true; // Flag for combat text
+    }
+    
+    // Check if player is outnumbered, give slight disadvantage
+    if (side2TeamAdvantage) {
+      player.unit.outnumbered = true; // Flag for combat text
+    }
+    
+    // Ensure chance is within bounds
+    critChance = Math.max(0.05, Math.min(0.7, critChance));
+    
+    // Roll for critical hit
+    if (Math.random() < critChance) {
+      player.unit.criticalHit = true;
+      player.unit.targetId = target?.id; // Store target ID for combat messages
+      
+      if (player.unit.teamAdvantage) {
+        console.log(`Player ${player.unit.displayName || player.id} landed a critical hit with team advantage!`);
+      } else {
+        console.log(`Player ${player.unit.displayName || player.id} landed a critical hit!`);
+      }
+    }
+  });
+  
+  // Process critical hits for side 2 players based on their assigned targets
+  side2Players.forEach(player => {
+    // Find this player's target if one exists
+    const targetInfo = engagementPairs.find(pair => pair.defender.id === player.id);
+    const target = targetInfo?.attacker; // This player is a defender, so their target is the attacker
+    
+    // Calculate critical hit chance based on multiple factors
+    let critChance = baseCritChance;
+    
+    // Level advantage modifier
+    const levelAdvantage = target ? 
+      (player.unit.level || 1) - (target.unit.level || 1) : 0;
+    critChance += levelAdvantage * 0.05;
+    
+    // Team advantage modifier - having more teammates makes critical hits more likely
+    if (side2TeamAdvantage) {
+      const teamBonus = 0.05 * Math.min(3, side2Players.length - side1Players.length);
+      critChance += teamBonus;
+      player.unit.teamAdvantage = true; // Flag for combat text
+    }
+    
+    // Check if player is outnumbered, give slight disadvantage
+    if (side1TeamAdvantage) {
+      player.unit.outnumbered = true; // Flag for combat text
+    }
+    
+    // Ensure chance is within bounds
+    critChance = Math.max(0.05, Math.min(0.7, critChance));
+    
+    // Roll for critical hit
+    if (Math.random() < critChance) {
+      player.unit.criticalHit = true;
+      player.unit.targetId = target?.id; // Store target ID for combat messages
+      
+      if (player.unit.teamAdvantage) {
+        console.log(`Player ${player.unit.displayName || player.id} landed a critical hit with team advantage!`);
+      } else {
+        console.log(`Player ${player.unit.displayName || player.id} landed a critical hit!`);
+      }
+    }
+  });
+  
+  // Apply chain reaction effects for critical hits
+  // If multiple players on one side land critical hits, enhance their effect
+  const side1CriticalHits = side1Players.filter(p => p.unit.criticalHit).length;
+  const side2CriticalHits = side2Players.filter(p => p.unit.criticalHit).length;
+  
+  // If a side has multiple critical hits, mark them as combo for extra effect
+  if (side1CriticalHits > 1) {
+    side1Players.forEach(player => {
+      if (player.unit.criticalHit) {
+        player.unit.comboCritical = true;
+        console.log(`Player ${player.unit.displayName || player.id} critical hit is part of a ${side1CriticalHits}x combo!`);
+      }
+    });
+  }
+  
+  if (side2CriticalHits > 1) {
+    side2Players.forEach(player => {
+      if (player.unit.criticalHit) {
+        player.unit.comboCritical = true;
+        console.log(`Player ${player.unit.displayName || player.id} critical hit is part of a ${side2CriticalHits}x combo!`);
+      }
+    });
+  }
+  
+  return { side1, side2 };
+}
+
+/**
+ * Create engagement pairs between two sides of players
+ * This simulates how players would target specific opponents in battle
+ * @param {Array} attackers - Players on attacking side
+ * @param {Array} defenders - Players on defending side
+ * @returns {Array} Array of {attacker, defender} pairs
+ */
+function createEngagementPairs(attackers, defenders) {
+  const pairs = [];
+  
+  // Make copies to avoid modifying the original arrays
+  const remainingAttackers = [...attackers];
+  const remainingDefenders = [...defenders];
+  
+  // First pass: Try to match players 1-to-1 until one side is exhausted
+  while (remainingAttackers.length > 0 && remainingDefenders.length > 0) {
+    // Get a random attacker and defender
+    const attackerIndex = Math.floor(Math.random() * remainingAttackers.length);
+    const defenderIndex = Math.floor(Math.random() * remainingDefenders.length);
+    
+    const attacker = remainingAttackers.splice(attackerIndex, 1)[0];
+    const defender = remainingDefenders.splice(defenderIndex, 1)[0];
+    
+    pairs.push({ attacker, defender });
+  }
+  
+  // Second pass: If there are leftover attackers, pair them with already paired defenders
+  if (remainingAttackers.length > 0 && defenders.length > 0) {
+    remainingAttackers.forEach(attacker => {
+      // Choose a random defender from the original list to "gang up" on
+      const targetDefender = defenders[Math.floor(Math.random() * defenders.length)];
+      pairs.push({ 
+        attacker, 
+        defender: targetDefender,
+        gangUp: true // Flag that this defender is being targeted by multiple attackers
+      });
+    });
+  }
+  
+  // Third pass: If there are leftover defenders, pair them with already paired attackers
+  if (remainingDefenders.length > 0 && attackers.length > 0) {
+    remainingDefenders.forEach(defender => {
+      // Choose a random attacker from the original list to "gang up" on
+      const targetAttacker = attackers[Math.floor(Math.random() * attackers.length)];
+      pairs.push({ 
+        attacker: targetAttacker, 
+        defender,
+        gangUp: true // Flag that this attacker is being targeted by multiple defenders
+      });
+    });
+  }
+  
+  return pairs;
+}
+
+/**
  * Selects units to be removed as casualties based on attrition count
  * Returns an object with units to remove and players killed
  */
@@ -171,10 +382,83 @@ export function selectUnitsForCasualties(units, attritionCount) {
   const unitsToRemove = [];
   const playersKilled = [];
   
-  // IMPROVED: Check if there's only one unit and it's a player - they get special protection now
-  // Only kill if attrition is at least 2 to give player units extra survivability
-  if (totalUnits === 1 && units[unitIds[0]].type === 'player') {
-    if (remainingAttrition >= 2) {
+  // Detect PvP - is this a solo player facing others?
+  const isSoloPlayer = (totalUnits === 1 && units[unitIds[0]].type === 'player');
+  const isPvpCombat = units[unitIds[0]]?.pvpCombat === true;
+  
+  // IMPROVED PLAYER COMBAT: Special handling for player vs player
+  if (isSoloPlayer && isPvpCombat) {
+    // In PvP combat, we use critical hits and team dynamics
+    const playerUnit = units[unitIds[0]];
+    const criticalHit = playerUnit.criticalHit === true;
+    const comboCritical = playerUnit.comboCritical === true; // Part of a multi-player combo
+    const outnumbered = playerUnit.outnumbered === true;
+    const opposingPlayerCount = playerUnit.opposingPlayerCount || 1;
+    
+    // Calculate effective attrition based on situation
+    let effectiveAttrition = remainingAttrition;
+    
+    // Outnumbered players have higher chance of taking casualties
+    if (outnumbered) {
+      effectiveAttrition = Math.min(3, effectiveAttrition + 0.5);
+    }
+    
+    // Critical hits significantly increase damage in PvP
+    if (criticalHit) {
+      // Regular critical hit forces at least 1 damage
+      if (effectiveAttrition < 1) effectiveAttrition = 1;
+      
+      // Combo critical is even more effective
+      if (comboCritical) {
+        console.log(`Combo critical! Player facing increased attrition`);
+        effectiveAttrition += 1;
+      }
+    }
+    
+    // Log the special PvP circumstance with all factors
+    console.log(`PvP combat for player ${playerUnit.displayName || playerUnit.id}: raw attrition=${remainingAttrition}, effective=${effectiveAttrition}, criticalHit=${criticalHit}, combo=${comboCritical}, outnumbered=${outnumbered}, vs ${opposingPlayerCount} players`);
+    
+    // Determine if player is killed
+    let playerKilled = false;
+    
+    // Critical hits always cause casualties
+    if (criticalHit) {
+      console.log(`Player defeated by critical hit in PvP combat!`);
+      playerKilled = true;
+    }
+    // Higher effective attrition threshold kills
+    else if (effectiveAttrition >= 2) {
+      console.log(`Player killed in PvP - sufficient attrition (${effectiveAttrition})`);
+      playerKilled = true;
+    }
+    // Small random chance based on attrition
+    else if (effectiveAttrition >= 1 && Math.random() < 0.15 * effectiveAttrition) {
+      console.log(`Player killed in PvP - lucky strike with attrition ${effectiveAttrition}`);
+      playerKilled = true;
+    }
+    else {
+      console.log(`Player survived in PvP (effective attrition: ${effectiveAttrition})`);
+    }
+    
+    if (playerKilled) {
+      unitsToRemove.push(unitIds[0]);
+      
+      playersKilled.push({
+        playerId: playerUnit.id,
+        displayName: playerUnit.displayName || "Unknown Player",
+        killedBy: playerUnit.targetId ? { id: playerUnit.targetId, critical: criticalHit } : undefined
+      });
+    }
+    
+    return { unitsToRemove, playersKilled };
+  }
+  
+  // NORMAL SOLO PLAYER: Standard protection for solo player vs monsters/environment
+  if (isSoloPlayer) {
+    // Fix for potential rounding errors in attrition - ensure 1.9+ rounds to 2
+    const adjustedAttrition = Math.round(attritionCount * 10) / 10;
+    
+    if (adjustedAttrition >= 2) {
       // Only extremely high attrition can kill a lone player
       const playerUnit = units[unitIds[0]];
       unitsToRemove.push(unitIds[0]);
@@ -184,10 +468,10 @@ export function selectUnitsForCasualties(units, attritionCount) {
         displayName: playerUnit.displayName || "Unknown Player"
       });
       
-      console.log(`Solo player unit killed - required higher attrition threshold (${remainingAttrition})`);
+      console.log(`Solo player unit killed - required higher attrition threshold (${adjustedAttrition})`);
     } else {
       // Player survives with less than 2 attrition
-      console.log(`Solo player unit survived due to extra protection (attrition: ${remainingAttrition})`);
+      console.log(`Solo player unit survived due to extra protection (attrition: ${adjustedAttrition})`);
     }
     
     return { unitsToRemove, playersKilled };
@@ -223,4 +507,45 @@ export function selectUnitsForCasualties(units, attritionCount) {
   }
   
   return { unitsToRemove, playersKilled };
+}
+
+// Helper function to extract solo player units from a side
+function extractSoloPlayerUnits(side) {
+  const players = [];
+  
+  // Check each group in the side
+  for (const groupId in side.groups || {}) {
+    const group = side.groups[groupId];
+    const unitIds = Object.keys(group?.units || {});
+    
+    // If this is a solo player group, add it to the list
+    if (unitIds.length === 1 && group.units[unitIds[0]].type === 'player') {
+      players.push({
+        id: groupId,
+        unitId: unitIds[0],
+        unit: group.units[unitIds[0]]
+      });
+    }
+  }
+  
+  return players;
+}
+
+// Calculate level advantage in PvP combat
+function getAveragePlayerLevelDifference(player, opponents) {
+  // Default level is 1 if not specified
+  const playerLevel = player.unit.level || 1;
+  
+  // If no opponents, no advantage
+  if (opponents.length === 0) return 0;
+  
+  // Calculate average opponent level
+  const totalOpponentLevel = opponents.reduce((sum, opponent) => {
+    return sum + (opponent.unit.level || 1);
+  }, 0);
+  
+  const averageOpponentLevel = totalOpponentLevel / opponents.length;
+  
+  // Return the level difference
+  return playerLevel - averageOpponentLevel;
 }
