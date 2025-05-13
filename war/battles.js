@@ -129,11 +129,26 @@ export function calculateAttrition(sidePower, sideRatio, opposingRatio) {
   } 
   // For more balanced sides or when random chance doesn't lead to zero attrition
   else if (sidePower > 0) {
-    // Ensure minimum attrition of 1 to keep battles progressing
-    attrition = Math.max(1, attrition);
+    // MODIFIED: Only ensure minimum attrition of 1 if sides are relatively balanced
+    // This allows battles with clear power differences to resolve without forcing casualties
+    const isCloselyMatched = Math.abs(sideRatio - 0.5) < 0.25; // Within 25% of even match
+    
+    if (isCloselyMatched) {
+      // For closely matched battles, ensure some casualties to prevent stalemates
+      attrition = Math.max(1, attrition);
+      console.log(`Close battle: ensuring minimum attrition of 1 for side with ${sideRatio.toFixed(2)} ratio`);
+    } else if (attrition === 0 && sideRatio < 0.4) {
+      // For unbalanced battles where weaker side would take 0 attrition, 
+      // still apply some chance of taking casualties to prevent permanent stalemates
+      const unluckyChance = 0.3 + (0.4 - sideRatio); // Higher chance as ratio decreases
+      if (Math.random() < unluckyChance) {
+        attrition = 1;
+        console.log(`Unlucky weaker side (${sideRatio.toFixed(2)}) takes 1 attrition despite low calculation`);
+      }
+    }
     
     // ADDED: Log to show casualties are being applied to a weak side
-    if (opposingRatio > 0.75 && sideRatio < 0.25) {
+    if (opposingRatio > 0.75 && sideRatio < 0.25 && attrition > 0) {
       console.log(`Weaker side with ${sideRatio.toFixed(2)} power ratio takes ${attrition} casualties`);
     }
   }
@@ -156,17 +171,24 @@ export function selectUnitsForCasualties(units, attritionCount) {
   const unitsToRemove = [];
   const playersKilled = [];
   
-  // Check if there's only one unit and it's a player - no special protection in this case
-  // But still respect the attrition count - only kill if attrition > 0
-  if (totalUnits === 1 && units[unitIds[0]].type === 'player' && remainingAttrition > 0) {
-    // When only a player unit exists in the group, they get no special protection
-    const playerUnit = units[unitIds[0]];
-    unitsToRemove.push(unitIds[0]);
-    
-    playersKilled.push({
-      playerId: playerUnit.id,
-      displayName: playerUnit.displayName || "Unknown Player"
-    });
+  // IMPROVED: Check if there's only one unit and it's a player - they get special protection now
+  // Only kill if attrition is at least 2 to give player units extra survivability
+  if (totalUnits === 1 && units[unitIds[0]].type === 'player') {
+    if (remainingAttrition >= 2) {
+      // Only extremely high attrition can kill a lone player
+      const playerUnit = units[unitIds[0]];
+      unitsToRemove.push(unitIds[0]);
+      
+      playersKilled.push({
+        playerId: playerUnit.id,
+        displayName: playerUnit.displayName || "Unknown Player"
+      });
+      
+      console.log(`Solo player unit killed - required higher attrition threshold (${remainingAttrition})`);
+    } else {
+      // Player survives with less than 2 attrition
+      console.log(`Solo player unit survived due to extra protection (attrition: ${remainingAttrition})`);
+    }
     
     return { unitsToRemove, playersKilled };
   }
