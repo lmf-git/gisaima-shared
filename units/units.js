@@ -147,6 +147,89 @@ export class Units {
   }
   
   /**
+   * Choose an appropriate monster type for a specific biome with terrain compatibility check
+   * @param {string} biome - Biome name
+   * @param {boolean} isWaterTile - Whether this is a water tile
+   * @returns {string} - Selected monster type
+   */
+  static chooseMonsterTypeForBiome(biome, isWaterTile = false) {
+    // Get all available monster types
+    const monsterTypes = Object.keys(UNITS).filter(
+      type => UNITS[type] && UNITS[type].category === 'monster'
+    );
+    
+    // Filter monsters by terrain compatibility first
+    let compatibleMonsters = monsterTypes.filter(type => {
+      const monster = UNITS[type];
+      
+      if (isWaterTile) {
+        // For water tiles, only use monsters that can traverse water
+        return monster.motion && 
+          (monster.motion.includes('water') || 
+           monster.motion.includes('aquatic') || 
+           monster.motion.includes('flying'));
+      } else {
+        // For land tiles, exclude monsters that can ONLY traverse water
+        return !monster.motion || 
+          monster.motion.length !== 1 || 
+          (!monster.motion.includes('water') && !monster.motion.includes('aquatic'));
+      }
+    });
+    
+    // If no compatible monsters (shouldn't happen), use all monsters
+    if (compatibleMonsters.length === 0) {
+      compatibleMonsters = monsterTypes;
+    }
+    
+    // First check for monsters with direct biome preference match
+    const biomeMatches = compatibleMonsters.filter(type => 
+      UNITS[type].biomePreference && 
+      UNITS[type].biomePreference.includes(biome)
+    );
+    
+    if (biomeMatches.length > 0) {
+      // Return a random monster from those matching this biome
+      return biomeMatches[Math.floor(Math.random() * biomeMatches.length)];
+    }
+    
+    // For water tiles, always return water-compatible monsters
+    if (isWaterTile) {
+      const waterMonsters = ['merfolk', 'sea_serpent', 'shark', 'drowned'];
+      const validWaterMonsters = waterMonsters.filter(type => 
+        compatibleMonsters.includes(type)
+      );
+      
+      if (validWaterMonsters.length > 0) {
+        return validWaterMonsters[Math.floor(Math.random() * validWaterMonsters.length)];
+      }
+    }
+    
+    // For generic land terrain, select based on probability
+    const weightedMonsters = compatibleMonsters.filter(type => 
+      !UNITS[type].biomePreference || UNITS[type].biomePreference.length === 0
+    );
+    
+    if (weightedMonsters.length > 0) {
+      // Use probability weights for selection when no specific biome match
+      const totalWeight = weightedMonsters.reduce((sum, type) => 
+        sum + (UNITS[type].probability || 0.1), 0
+      );
+      
+      let random = Math.random() * totalWeight;
+      for (const type of weightedMonsters) {
+        const weight = UNITS[type].probability || 0.1;
+        random -= weight;
+        if (random <= 0) {
+          return type;
+        }
+      }
+    }
+    
+    // Fallback to a random compatible monster
+    return compatibleMonsters[Math.floor(Math.random() * compatibleMonsters.length)];
+  }
+  
+  /**
    * Get available player units for a structure
    * @param {object} structure - Structure data
    * @returns {Array} Array of available units with availability info
