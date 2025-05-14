@@ -410,6 +410,224 @@ const UNITS = {
         }
     },
 
+    // New Boat Units - Water Transportation
+    'small_boat': {
+        name: 'Small Raft',
+        description: "Simple wooden raft for crossing water",
+        category: 'player',
+        type: 'boat',
+        power: 0.5,
+        capacity: 3, // Can transport 3 units
+        timePerUnit: 1.0,
+        icon: 'raft',
+        motion: ['water'], // Can only traverse water
+        cost: { WOODEN_STICKS: 8, VINE: 4 },
+        requirements: {
+            structureLevel: 1
+        },
+        recruitment: {
+            sortOrder: 400,
+            tooltip: "Basic water transport for small groups"
+        }
+    },
+    
+    'medium_boat': {
+        name: 'Fishing Boat',
+        description: "Sturdy boat with modest cargo capacity",
+        category: 'player',
+        type: 'boat',
+        power: 1.0,
+        capacity: 6, // Can transport 6 units
+        timePerUnit: 1.5,
+        icon: 'boat',
+        motion: ['water'],
+        cost: { WOODEN_STICKS: 15, LEATHER: 5, ROPE: 3 },
+        requirements: {
+            structureLevel: 2,
+            buildingType: 'harbor',
+            buildingLevel: 1
+        },
+        recruitment: {
+            sortOrder: 410,
+            tooltip: "Medium capacity vessel for water exploration",
+            unavailableText: "Requires level 2 structure with harbor"
+        }
+    },
+    
+    'large_boat': {
+        name: 'Trading Ship',
+        description: "Large vessel for transporting troops and cargo",
+        category: 'player',
+        type: 'ship',
+        power: 1.5,
+        capacity: 12, // Can transport 12 units
+        timePerUnit: 2.5,
+        icon: 'ship',
+        motion: ['water'],
+        cost: { WOODEN_STICKS: 25, IRON_SHARDS: 10, ROPE: 8, CANVAS: 5 },
+        requirements: {
+            structureLevel: 3,
+            buildingType: 'harbor',
+            buildingLevel: 2
+        },
+        recruitment: {
+            sortOrder: 420,
+            tooltip: "Large capacity vessel for major water expeditions",
+            unavailableText: "Requires level 3 structure with level 2 harbor"
+        }
+    },
+    
+    'combat_boat': {
+        name: 'War Canoe',
+        description: "Fast attack boat armed with weapons",
+        category: 'player',
+        type: 'warship',
+        power: 3.0,
+        capacity: 4, // Combat focused, less capacity
+        timePerUnit: 2.0,
+        icon: 'warship',
+        motion: ['water'],
+        cost: { WOODEN_STICKS: 15, IRON_SHARDS: 8, BONE: 5 },
+        requirements: {
+            structureLevel: 2,
+            buildingType: 'harbor',
+            buildingLevel: 1,
+            buildingType2: 'barracks',
+            buildingLevel2: 2
+        },
+        recruitment: {
+            sortOrder: 430,
+            tooltip: "Naval combat vessel with decent speed",
+            unavailableText: "Requires harbor and level 2 barracks"
+        }
+    },
+    
+    'steamboat': {
+        name: 'Steamboat',
+        description: "Advanced vessel powered by steam engine",
+        category: 'player',
+        type: 'steamship',
+        power: 2.5,
+        capacity: 10,
+        speed: 1.5, // Faster than normal ships
+        timePerUnit: 3.0,
+        icon: 'steamship',
+        motion: ['water'],
+        cost: { WOODEN_STICKS: 20, IRON: 15, COAL: 10, GEAR: 5 },
+        requirements: {
+            structureLevel: 3,
+            buildingType: 'harbor',
+            buildingLevel: 3,
+            research: 'steam_power'
+        },
+        recruitment: {
+            sortOrder: 450,
+            tooltip: "Fast advanced vessel with good capacity",
+            unavailableText: "Requires level 3 harbor and steam power research"
+        }
+    },
+    
+    'explorer_boat': {
+        name: 'Explorer Vessel',
+        description: "Specialized boat for charting unknown waters",
+        category: 'player',
+        type: 'explorership',
+        power: 1.0,
+        capacity: 5,
+        visibility: 2.0, // Increased visibility range
+        timePerUnit: 2.0,
+        icon: 'explorership',
+        motion: ['water'],
+        cost: { WOODEN_STICKS: 18, CANVAS: 6, TELESCOPE: 1 },
+        requirements: {
+            structureLevel: 2,
+            buildingType: 'harbor',
+            buildingLevel: 1,
+            buildingType2: 'observatory',
+            buildingLevel2: 1
+        },
+        recruitment: {
+            sortOrder: 440,
+            tooltip: "Exploration vessel with enhanced visibility",
+            unavailableText: "Requires harbor and observatory"
+        }
+    },
+    
+    // Race-specific boats
+    'elven_swan_boat': {
+        name: 'Swan Ship',
+        description: "Elegant elven vessel with magical properties",
+        category: 'player',
+        type: 'magicship',
+        race: 'elf',
+        power: 2.0,
+        capacity: 8,
+        speed: 1.3, // Faster than standard ships
+        timePerUnit: 2.0,
+        icon: 'swanship',
+        motion: ['water'],
+        cost: { WOODEN_STICKS: 15, MOON_SILVER: 5, GLOW_DUST: 3 },
+        requirements: {
+            structureLevel: 2,
+            race: 'elf',
+            buildingType: 'harbor'
+        },
+        recruitment: {
+            sortOrder: 460,
+            tooltip: "Elegant elven vessel with enhanced speed",
+            unavailableText: "Requires Elven structure with harbor"
+        }
+    },
+    
+    'dwarf_ironclad': {
+        name: 'Ironclad',
+        description: "Heavy dwarven vessel with metal plating",
+        category: 'player',
+        type: 'ironship',
+        race: 'dwarf',
+        power: 4.0, // High combat power
+        capacity: 7,
+        timePerUnit: 3.0,
+        icon: 'ironship',
+        motion: ['water'],
+        cost: { IRON: 20, STONE_PIECES: 15, COAL: 8 },
+        requirements: {
+            structureLevel: 2,
+            race: 'dwarf',
+            buildingType: 'harbor',
+            buildingLevel: 2
+        },
+        recruitment: {
+            sortOrder: 470,
+            tooltip: "Heavily armored dwarven combat vessel",
+            unavailableText: "Requires Dwarven structure with level 2 harbor"
+        }
+    },
+    
+    'fairy_lily_pad': {
+        name: 'Lily Pad Skiff',
+        description: "Magical fairy vessel that glides across water",
+        category: 'player',
+        type: 'natureship',
+        race: 'fairy',
+        power: 0.5,
+        capacity: 4,
+        speed: 1.8, // Very fast but fragile
+        timePerUnit: 1.0,
+        icon: 'lilypad',
+        motion: ['water'],
+        cost: { PETAL: 10, GLOW_DUST: 5, HERB: 3 },
+        requirements: {
+            structureLevel: 1,
+            race: 'fairy'
+        },
+        recruitment: {
+            sortOrder: 480,
+            tooltip: "Fast fairy vessel with nature magic",
+            unavailableText: "Requires Fairy structure"
+        }
+    },
+    
     // Monster Units
     'ork': {
         name: "Goblin Raiders",
