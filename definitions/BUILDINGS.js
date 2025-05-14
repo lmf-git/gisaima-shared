@@ -72,6 +72,20 @@ export const BUILDINGS = {
       ]
     },
     
+    // Add the new harbor building type
+    harbor: {
+      name: "Harbor",
+      description: "A port facility for constructing and launching water vessels. Higher levels enable more advanced ships.",
+      icon: "⚓",
+      upgradeTimeMultiplier: 1.4,
+      waterRequired: true, // This building requires a water tile adjacent
+      baseRequirements: [
+        { name: 'Wooden Sticks', quantity: 20 },
+        { name: 'Stone Pieces', quantity: 15 },
+        { name: 'Rope', quantity: 8 }
+      ]
+    },
+    
     // Monster building types
     monster_nest: {
       name: "Monster Nest",
@@ -323,6 +337,46 @@ export const BUILDINGS = {
       ]
     },
     
+    // Add benefits for the harbor building
+    harbor: {
+      1: [
+        {
+          name: 'Basic Harbor',
+          description: 'Allows construction of small boats and rafts',
+          unlocks: ['small_boat']
+        }
+      ],
+      2: [
+        {
+          name: 'Improved Docks',
+          description: 'Allows construction of medium-sized vessels',
+          unlocks: ['medium_boat', 'combat_boat']
+        }
+      ],
+      3: [
+        {
+          name: 'Advanced Shipyard',
+          description: 'Allows construction of large ships and advanced vessels',
+          unlocks: ['large_boat', 'steamboat']
+        }
+      ],
+      4: [
+        {
+          name: 'Naval Engineering',
+          description: 'Improves ship construction speed and durability',
+          bonus: { shipBuildingSpeed: 0.2, shipDurability: 0.2 }
+        }
+      ],
+      5: [
+        {
+          name: 'Master Shipyard',
+          description: 'Enables construction of the most advanced vessels',
+          unlocks: ['flagship', 'trading_galleon'],
+          bonus: { shipBuildingSpeed: 0.3, shipDurability: 0.3, navalCapacity: 0.5 }
+        }
+      ]
+    },
+    
     // Monster building benefits
     monster_nest: {
       1: [{ name: 'Monster Shelter', description: 'Provides basic shelter for monsters', bonus: { monsterRegeneration: 0.1 } }],
@@ -409,6 +463,18 @@ export const BUILDINGS = {
         resources.push({ name: 'Seeds', quantity: Math.floor(5 * levelMultiplier) });
         if (currentLevel >= 2) {
           resources.push({ name: 'Water', quantity: Math.floor(2 * levelMultiplier) });
+        }
+        break;
+        
+      case 'harbor':
+        // Extra wood and rope for harbor construction
+        resources.push({ name: 'Wooden Sticks', quantity: Math.floor(8 * levelMultiplier) });
+        resources.push({ name: 'Rope', quantity: Math.floor(4 * levelMultiplier) });
+        if (currentLevel >= 2) {
+          resources.push({ name: 'Canvas', quantity: Math.floor(3 * levelMultiplier) });
+        }
+        if (currentLevel >= 3) {
+          resources.push({ name: 'Iron Ore', quantity: Math.floor(5 * levelMultiplier) });
         }
         break;
     }
