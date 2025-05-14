@@ -7,14 +7,14 @@ export class Units {
    * Biome-specific monster preferences
    */
   static BIOME_MONSTER_WEIGHTS = {
-    plains: { goblin: 0.4, bandit: 0.3, wolf: 0.2, other: 0.1 },
-    forest: { wolf: 0.3, spider: 0.3, bandit: 0.2, goblin: 0.1, other: 0.1 },
-    mountain: { troll: 0.3, goblin: 0.3, skeleton: 0.2, other: 0.2 },
+    plains: { ork: 0.4, bandit: 0.3, wolf: 0.2, other: 0.1 },
+    forest: { wolf: 0.3, spider: 0.3, bandit: 0.2, ork: 0.1, other: 0.1 },
+    mountain: { troll: 0.3, ork: 0.3, skeleton: 0.2, other: 0.2 },
     desert: { skeleton: 0.4, bandit: 0.3, elemental: 0.2, other: 0.1 },
     swamp: { spider: 0.4, skeleton: 0.3, elemental: 0.2, other: 0.1 },
     tundra: { wolf: 0.4, elemental: 0.3, skeleton: 0.2, other: 0.1 },
-    ruins: { skeleton: 0.5, goblin: 0.2, bandit: 0.2, other: 0.1 },
-    default: { goblin: 0.25, wolf: 0.25, bandit: 0.2, spider: 0.2, other: 0.1 }
+    ruins: { skeleton: 0.5, ork: 0.2, bandit: 0.2, other: 0.1 },
+    default: { ork: 0.25, wolf: 0.25, bandit: 0.2, spider: 0.2, other: 0.1 }
   };
 
   /**

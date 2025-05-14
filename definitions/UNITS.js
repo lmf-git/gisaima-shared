@@ -411,7 +411,7 @@ const UNITS = {
     },
 
     // Monster Units
-    'goblin': {
+    'ork': {
         name: "Goblin Raiders",
         description: "Small, crafty creatures that attack in groups",
         category: 'monster',
