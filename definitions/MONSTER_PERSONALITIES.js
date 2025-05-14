@@ -12,13 +12,16 @@ export const MONSTER_PERSONALITIES = {
     description: 'Prioritizes attacking players and structures',
     weights: {
       attack: 2.0,
-      explore: 0.8,
+      explore: 1.2, // Increased from 0.8
       build: 0.5,
-      gather: 0.3,
-      steal: 0.3  // Prefers combat over theft
+      gather: 0.5, // Increased from 0.3
+      steal: 0.5,  // Increased from 0.3
+      merge: 1.2,  // Added merge weight
+      joinBattle: 1.8  // Added join battle weight
     },
     canAttackMonsters: true,
-    structureInteractionPreference: 'attack' // Prefers attacking structures over stealing
+    attackMonsters: 0.8, // Added specific weight for monster-vs-monster combat
+    structureInteractionPreference: 'attack'
   },
 
   // Sneaky monsters prioritize stealing over direct combat
@@ -28,14 +31,16 @@ export const MONSTER_PERSONALITIES = {
     emoji: '🦝',
     description: 'Prefers stealing over direct confrontation',
     weights: {
-      attack: 0.5,
-      explore: 1.2,
-      build: 0.7,
-      gather: 1.0,
-      steal: 2.0  // High preference for stealing
+      attack: 0.6, // Slightly increased from 0.5
+      explore: 1.4, // Increased from 1.2
+      build: 0.8, // Slightly increased from 0.7
+      gather: 1.2, // Increased from 1.0
+      steal: 2.0,
+      merge: 0.7, // Added merge weight
+      joinBattle: 0.4 // Added join battle weight
     },
     returnAfterSteal: true,
-    structureInteractionPreference: 'steal' // Prefers stealing from structures over attacking
+    structureInteractionPreference: 'steal'
   },
 
   // Feral monsters are unpredictable and chaotic
@@ -45,15 +50,18 @@ export const MONSTER_PERSONALITIES = {
     emoji: '🐺',
     description: 'Wild and unpredictable behavior',
     weights: {
-      attack: 1.5,
-      explore: 1.5,
-      build: 0.3,
-      gather: 0.7,
-      steal: 1.0  // Average preference for stealing
+      attack: 1.8, // Increased from 1.5
+      explore: 1.8, // Increased from 1.5
+      build: 0.4, // Slightly increased from 0.3
+      gather: 0.9, // Slightly increased from 0.7
+      steal: 1.2, // Increased from 1.0
+      merge: 0.5, // Added merge weight
+      joinBattle: 1.5, // Added join battle weight
+      attackMonsters: 1.5 // High weight for attacking other monsters
     },
     canAttackMonsters: true,
     randomBattleSides: true,
-    structureInteractionPreference: 'random' // Randomly chooses between attack and steal
+    structureInteractionPreference: 'random'
   },
 
   // Territorial monsters prioritize defending and building their territory
@@ -63,14 +71,16 @@ export const MONSTER_PERSONALITIES = {
     emoji: '🏰',
     description: 'Defends territory and builds structures',
     weights: {
-      attack: 1.0,
-      explore: 0.5,
-      build: 1.8,
-      gather: 1.2,
-      steal: 0.8  // Moderate preference for stealing
+      attack: 1.2, // Increased from 1.0
+      explore: 0.6, // Slightly increased from 0.5
+      build: 2.0, // Increased from 1.8
+      gather: 1.4, // Increased from 1.2
+      steal: 0.9, // Slightly increased from 0.8
+      merge: 1.5, // Added merge weight - likes to grow
+      joinBattle: 1.0 // Added join battle weight
     },
-    homeRange: 15, // Tends to stay within this range of home structure
-    structureInteractionPreference: 'steal_then_return' // Steals and then returns to base
+    homeRange: 15,
+    structureInteractionPreference: 'steal_then_return'
   },
 
   // Cautious monsters avoid confrontation when possible
@@ -80,14 +90,16 @@ export const MONSTER_PERSONALITIES = {
     emoji: '🦔',
     description: 'Avoids direct confrontation when possible',
     weights: {
-      attack: 0.4,
-      explore: 1.0,
-      build: 0.9,
-      gather: 1.4,
-      steal: 1.5  // High preference for stealing
+      attack: 0.5, // Slightly increased from 0.4
+      explore: 1.2, // Slightly increased from 1.0
+      build: 1.0, // Slightly increased from 0.9
+      gather: 1.6, // Increased from 1.4
+      steal: 1.7, // Increased from 1.5
+      merge: 0.9, // Added merge weight
+      joinBattle: 0.3 // Added join battle weight - avoids conflict
     },
-    fleeThreshold: 0.7, // Flees from battle more easily
-    structureInteractionPreference: 'steal' // Prefers stealing from structures over attacking
+    fleeThreshold: 0.7,
+    structureInteractionPreference: 'steal'
   },
 
   // Nomadic monsters prioritize exploration and movement
@@ -97,14 +109,34 @@ export const MONSTER_PERSONALITIES = {
     emoji: '🐫',
     description: 'Wanders widely and explores',
     weights: {
-      attack: 0.7,
-      explore: 2.0,
-      build: 0.4,
-      gather: 1.0,
-      steal: 1.2  // Above average preference for stealing
+      attack: 0.8, // Slightly increased from 0.7
+      explore: 2.2, // Increased from 2.0
+      build: 0.5, // Slightly increased from 0.4
+      gather: 1.2, // Increased from 1.0
+      steal: 1.4, // Increased from 1.2
+      merge: 0.6, // Added merge weight - prefers smaller groups
+      joinBattle: 0.7 // Added join battle weight
     },
-    movementSpeedBonus: 1.3, // Moves faster
-    structureInteractionPreference: 'steal_and_move' // Steals and keeps wandering
+    movementSpeedBonus: 1.3,
+    structureInteractionPreference: 'steal_and_move'
+  },
+  
+  // Balanced is the default personality
+  BALANCED: {
+    id: 'BALANCED',
+    name: 'Balanced',
+    emoji: '⚖️',
+    description: 'Balanced behavior across all activities',
+    weights: {
+      attack: 1.0,
+      explore: 1.0,
+      build: 1.0,
+      gather: 1.0,
+      steal: 1.0,
+      merge: 1.0,
+      joinBattle: 1.0
+    },
+    structureInteractionPreference: 'balanced'
   }
 };
 
