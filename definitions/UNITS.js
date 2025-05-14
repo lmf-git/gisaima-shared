@@ -421,6 +421,7 @@ const UNITS = {
         mergeLimit: 8,
         power: 0.7,
         speed: 1.2,
+        motion: ['ground'], // Adding motion property for existing monsters
         possibleItems: ['Wooden Sticks', 'Stolen Goods', 'Crude Weapon'],
         biomePreference: ['plains', 'forest'],
         personalityPreferences: ['SNEAKY', 'CAUTIOUS'] // Goblins tend to be sneaky thieves
@@ -435,6 +436,7 @@ const UNITS = {
         mergeLimit: 10,
         power: 1.2,
         speed: 1.5,
+        motion: ['ground'], // Adding motion property
         possibleItems: ['Wolf Meat', 'Wolf Pelt', 'Wolf Fang'],
         biomePreference: ['forest', 'tundra'],
         personalityPreferences: ['FERAL', 'AGGRESSIVE', 'TERRITORIAL'] // Wolves are wild and territorial
@@ -449,6 +451,7 @@ const UNITS = {
         mergeLimit: 6,
         power: 1.0,
         speed: 1.0,
+        motion: ['ground'], // Adding motion property
         possibleItems: ['Ancient Coin', 'Crude Weapon', 'Leather Scraps'],
         biomePreference: ['plains', 'forest'],
         personalityPreferences: ['AGGRESSIVE', 'SNEAKY'] // Bandits are either direct attackers or stealthy thieves
@@ -463,6 +466,7 @@ const UNITS = {
         mergeLimit: 12,
         power: 0.9,
         speed: 1.2,
+        motion: ['ground'], // Adding motion property
         possibleItems: ['Spider Silk', 'Venom Sac', 'Spider Eye'],
         biomePreference: ['forest', 'swamp'],
         personalityPreferences: ['SNEAKY', 'TERRITORIAL'] // Spiders are territorial and sneaky
@@ -477,6 +481,7 @@ const UNITS = {
         mergeLimit: 15,
         power: 0.8,
         speed: 0.9,
+        motion: ['ground'], // Adding motion property
         possibleItems: ['Bone Dust', 'Ancient Blade', 'Soul Essence'],
         biomePreference: ['desert', 'mountain', 'ruins'],
         personalityPreferences: ['NOMADIC', 'FERAL'] // Undead wander aimlessly and unpredictably
@@ -491,6 +496,7 @@ const UNITS = {
         mergeLimit: 3,
         power: 2.5,
         speed: 0.7,
+        motion: ['ground'], // Adding motion property
         possibleItems: ['Troll Hide', 'Troll Club', 'Troll Tooth'],
         biomePreference: ['mountain', 'hills'],
         personalityPreferences: ['AGGRESSIVE', 'TERRITORIAL'] // Trolls are aggressive and territorial
@@ -505,9 +511,87 @@ const UNITS = {
         mergeLimit: 5,
         power: 2.0,
         speed: 1.0,
+        motion: ['ground', 'flying'], // Elementals can fly
         possibleItems: ['Elemental Essence', 'Shiny Gem', 'Magical Residue'],
         biomePreference: ['tundra', 'desert', 'swamp'],
         personalityPreferences: ['FERAL', 'NOMADIC'] // Elementals are wild and wander
+    },
+    
+    // New Water-Only Monster Units
+    'merfolk': {
+        name: "Merfolk Raiders",
+        description: "Aquatic humanoids skilled with tridents and water magic",
+        category: 'monster',
+        probability: 0.15,
+        unitCountRange: [2, 5],
+        itemChance: 0.7,
+        mergeLimit: 8,
+        power: 1.3,
+        speed: 1.2,
+        motion: ['water'], // Water-only movement
+        possibleItems: ['Coral Shard', 'Pearl', 'Sea Essence'],
+        biomePreference: ['ocean', 'sea', 'shallows'],
+        personalityPreferences: ['TERRITORIAL', 'AGGRESSIVE']
+    },
+    'sea_serpent': {
+        name: "Sea Serpent",
+        description: "Long, snake-like aquatic creature with powerful jaws",
+        category: 'monster',
+        probability: 0.1,
+        unitCountRange: [1, 2],
+        itemChance: 0.6,
+        mergeLimit: 3,
+        power: 2.0,
+        speed: 1.4,
+        motion: ['water'], // Water-only movement
+        possibleItems: ['Serpent Scale', 'Serpent Tooth', 'Sea Essence'],
+        biomePreference: ['deep_ocean', 'ocean'],
+        personalityPreferences: ['AGGRESSIVE', 'TERRITORIAL']
+    },
+    'shark': {
+        name: "Shark Pack",
+        description: "Sleek, efficient hunters of the deep",
+        category: 'monster',
+        probability: 0.2,
+        unitCountRange: [2, 4],
+        itemChance: 0.5,
+        mergeLimit: 7,
+        power: 1.5,
+        speed: 1.6,
+        motion: ['water'], // Water-only movement
+        possibleItems: ['Shark Tooth', 'Shark Fin', 'Raw Fish'],
+        biomePreference: ['ocean', 'deep_ocean', 'sea'],
+        personalityPreferences: ['FERAL', 'NOMADIC']
+    },
+    'kraken': {
+        name: "Kraken",
+        description: "Massive tentacled monster of the deep seas",
+        category: 'monster',
+        probability: 0.05,
+        unitCountRange: [1, 1],
+        itemChance: 0.9,
+        mergeLimit: 1,
+        power: 3.0,
+        speed: 0.8,
+        motion: ['water'], // Water-only movement
+        possibleItems: ['Kraken Ink', 'Giant Tentacle', 'Ancient Pearl'],
+        biomePreference: ['deep_ocean'],
+        personalityPreferences: ['TERRITORIAL', 'AGGRESSIVE']
+    },
+    'drowned': {
+        name: "Drowned Dead",
+        description: "Waterlogged undead that lurk beneath the waves",
+        category: 'monster',
+        probability: 0.15,
+        unitCountRange: [3, 6],
+        itemChance: 0.6,
+        mergeLimit: 10,
+        power: 0.8,
+        speed: 0.7,
+        motion: ['water'], // Water-only movement
+        possibleItems: ['Waterlogged Bone', 'Barnacles', 'Rusted Metal'],
+        biomePreference: ['sea', 'shallows', 'river'],
+        personalityPreferences: ['FERAL', 'NOMADIC']
     }
 };
 
