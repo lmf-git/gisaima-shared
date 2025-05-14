@@ -485,6 +485,125 @@ export const ITEMS = {
     description: 'Crystallized magical energy from a powerful creature',
     power: 15, // Battle power contribution
     monsterDrop: true
+  },
+
+  // Add new volcanic items
+  VOLCANIC_GLASS: {
+    name: 'Volcanic Glass',
+    type: 'resource',
+    rarity: 'uncommon',
+    description: 'Sharp, dark glass formed from rapidly cooled lava',
+    biomes: ['volcanic_peak', 'lava_flow', 'magma_flow', 'volcanic_rock', 'volcanic_soil', 'volcanic_caldera']
+  },
+  OBSIDIAN_SHARD: {
+    name: 'Obsidian Shard',
+    type: 'resource',
+    rarity: 'rare',
+    description: 'A piece of natural volcanic glass, extremely sharp and durable',
+    biomes: ['volcanic_peak', 'lava_flow', 'magma_flow', 'volcanic_rock']
+  },
+  MAGMA_ESSENCE: {
+    name: 'Magma Essence',
+    type: 'resource',
+    rarity: 'epic',
+    description: 'The captured energy of the molten earth, glows with inner heat',
+    biomes: ['magma_flow', 'lava_flow']
+  },
+
+  // Add mountain-specific items
+  ALPINE_HERB: {
+    name: 'Alpine Herb',
+    type: 'resource',
+    rarity: 'uncommon',
+    description: 'Rare herb that only grows at high elevations',
+    biomes: ['alpine_snow', 'alpine_meadow', 'snow_patched_hills']
+  },
+  FROST_CRYSTAL: {
+    name: 'Frost Crystal',
+    type: 'gem',
+    rarity: 'rare',
+    description: 'A crystal formed in extreme cold at high elevations',
+    biomes: ['snow_cap', 'glacial_peak', 'alpine_snow', 'glacier', 'snow_field']
+  },
+
+  // Add forest-specific items
+  ANCIENT_WOOD: {
+    name: 'Ancient Wood',
+    type: 'resource',
+    rarity: 'uncommon',
+    description: 'Wood from a very old tree with unusual properties',
+    biomes: ['ancient_forest', 'deep_forest', 'fey_forest']
+  },
+  GLOWING_MUSHROOM: {
+    name: 'Glowing Mushroom',
+    type: 'resource',
+    rarity: 'rare',
+    description: 'A fungus that emits a soft, blue-green glow',
+    biomes: ['deep_forest', 'dense_forest', 'fey_forest', 'swamp', 'enchanted_grove']
+  },
+
+  // Add desert-specific items
+  DESERT_BLOOM: {
+    name: 'Desert Bloom',
+    type: 'resource',
+    rarity: 'rare',
+    description: 'A beautiful flower that somehow thrives in the harsh desert',
+    biomes: ['desert', 'barren_desert', 'desert_scrub']
+  },
+  SUN_CRYSTAL: {
+    name: 'Sun Crystal',
+    type: 'gem',
+    rarity: 'epic',
+    description: 'A crystal that seems to capture the desert sun within it',
+    biomes: ['desert', 'barren_desert', 'chalky_plains']
+  },
+
+  // Add swamp/marsh items
+  BOG_IRON: {
+    name: 'Bog Iron',
+    type: 'resource',
+    rarity: 'uncommon',
+    description: 'Iron deposits formed in bog or swamp environments',
+    biomes: ['swamp', 'marsh', 'bog', 'wetland', 'marshy_shore']
+  },
+  WILL_O_WISP_ESSENCE: {
+    name: 'Will-o\'-Wisp Essence',
+    type: 'gem',
+    rarity: 'rare',
+    description: 'The captured light of mysterious swamp phenomena',
+    biomes: ['swamp', 'bog', 'marsh']
+  },
+
+  // Add ocean/water items
+  PEARL: {
+    name: 'Pearl',
+    type: 'gem',
+    rarity: 'uncommon',
+    description: 'A beautiful spherical gem formed within certain mollusks',
+    biomes: ['shallows', 'sea', 'ocean']
+  },
+  CORAL_FRAGMENT: {
+    name: 'Coral Fragment',
+    type: 'resource',
+    rarity: 'uncommon',
+    description: 'A piece of colorful coral reef structure',
+    biomes: ['shallows', 'sea']
+  },
+  ABYSSAL_CRYSTAL: {
+    name: 'Abyssal Crystal',
+    type: 'gem',
+    rarity: 'epic',
+    description: 'A mysterious crystal from the deepest parts of the ocean',
+    biomes: ['deep_ocean']
+  },
+
+  // Add anomaly-related special items
+  ANOMALOUS_FRAGMENT: {
+    name: 'Anomalous Fragment',
+    type: 'artifact',
+    rarity: 'legendary',
+    description: 'A strange object that seems to defy the natural laws',
+    biomes: []  // Can be found in any anomalous terrain
   }
 };
 
