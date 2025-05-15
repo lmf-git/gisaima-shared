@@ -1890,7 +1890,8 @@ export class TerrainGenerator {
       // Create a custom water channel with dynamic color based on depth
       const waterChannelBiome = {
         name: BIOMES.WATER.WATER_CHANNEL.name,
-        color: getWaterChannelColor(waterNetworkValue)
+        color: getWaterChannelColor(waterNetworkValue),
+        water: true  // Explicitly set water property for custom water channels
       };
       return waterChannelBiome;
     }
