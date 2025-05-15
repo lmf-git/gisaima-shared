@@ -21,7 +21,13 @@ export const MONSTER_PERSONALITIES = {
     },
     canAttackMonsters: true,
     attackMonsters: 0.8, // Added specific weight for monster-vs-monster combat
-    structureInteractionPreference: 'attack'
+    structureInteractionPreference: 'attack',
+    // Added interruption settings
+    pathInterruption: {
+      combatThreshold: 0.2,    // Very likely to interrupt for combat
+      resourceThreshold: 0.7,  // Unlikely to interrupt for resources
+      detectionRadius: 5       // Large detection radius
+    }
   },
 
   // Sneaky monsters prioritize stealing over direct combat
@@ -40,7 +46,13 @@ export const MONSTER_PERSONALITIES = {
       joinBattle: 0.4 // Added join battle weight
     },
     returnAfterSteal: true,
-    structureInteractionPreference: 'steal'
+    structureInteractionPreference: 'steal',
+    // Added interruption settings
+    pathInterruption: {
+      combatThreshold: 0.7,    // Unlikely to interrupt for combat
+      resourceThreshold: 0.2,  // Very likely to interrupt for resources
+      detectionRadius: 4       // Good detection radius for spotting resources
+    }
   },
 
   // Feral monsters are unpredictable and chaotic
@@ -61,7 +73,14 @@ export const MONSTER_PERSONALITIES = {
     },
     canAttackMonsters: true,
     randomBattleSides: true,
-    structureInteractionPreference: 'random'
+    structureInteractionPreference: 'random',
+    // Added interruption settings
+    pathInterruption: {
+      combatThreshold: 0.1,    // Extremely likely to interrupt for combat
+      resourceThreshold: 0.6,  // Somewhat likely to interrupt for resources
+      detectionRadius: 3,      // Standard detection radius
+      randomInterruptions: true // Can randomly change course for no reason
+    }
   },
 
   // Territorial monsters prioritize defending and building their territory
@@ -80,7 +99,13 @@ export const MONSTER_PERSONALITIES = {
       joinBattle: 1.0 // Added join battle weight
     },
     homeRange: 15,
-    structureInteractionPreference: 'steal_then_return'
+    structureInteractionPreference: 'steal_then_return',
+    pathInterruption: {
+      combatThreshold: 0.4,      // Moderately likely to interrupt for combat
+      resourceThreshold: 0.5,    // Moderately likely to interrupt for resources
+      structureThreshold: 0.3,   // Very likely to interrupt for structures
+      detectionRadius: 3         // Standard detection radius
+    }
   },
 
   // Cautious monsters avoid confrontation when possible
@@ -99,7 +124,12 @@ export const MONSTER_PERSONALITIES = {
       joinBattle: 0.3 // Added join battle weight - avoids conflict
     },
     fleeThreshold: 0.7,
-    structureInteractionPreference: 'steal'
+    structureInteractionPreference: 'steal',
+    pathInterruption: {
+      combatThreshold: 0.8,      // Very unlikely to interrupt for combat
+      resourceThreshold: 0.3,    // Likely to interrupt for resources
+      detectionRadius: 2         // Smaller detection radius - less distractible
+    }
   },
 
   // Nomadic monsters prioritize exploration and movement
@@ -118,7 +148,13 @@ export const MONSTER_PERSONALITIES = {
       joinBattle: 0.7 // Added join battle weight
     },
     movementSpeedBonus: 1.3,
-    structureInteractionPreference: 'steal_and_move'
+    structureInteractionPreference: 'steal_and_move',
+    pathInterruption: {
+      combatThreshold: 0.6,      // Somewhat unlikely to interrupt for combat
+      resourceThreshold: 0.4,    // Moderately likely to interrupt for resources
+      detectionRadius: 4,        // Larger detection radius - explores more
+      movementChangeProbability: 0.4 // More likely to change direction randomly
+    }
   },
   
   // Balanced is the default personality
@@ -136,7 +172,13 @@ export const MONSTER_PERSONALITIES = {
       merge: 1.0,
       joinBattle: 1.0
     },
-    structureInteractionPreference: 'balanced'
+    structureInteractionPreference: 'balanced',
+    pathInterruption: {
+      combatThreshold: 0.5,      // Average likelihood for all interruptions
+      resourceThreshold: 0.5,
+      structureThreshold: 0.5,
+      detectionRadius: 3         // Standard detection radius
+    }
   }
 };
 
