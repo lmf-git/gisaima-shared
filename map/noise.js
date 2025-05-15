@@ -1595,14 +1595,14 @@ export class TerrainGenerator {
       anomalyType, anomalyStrength // Pass anomaly data to getBiome
     );
     
-    // Create result with added water boolean
+    // Create result with simplified water boolean - rely only on biome's water property
     const result = { 
       height, moisture, continent, slope, biome, isCliff, isHighCliff,
       color: biome.color, riverValue, lakeValue, lavaValue, scorchedValue,
       waterNetworkValue,
       anomalyType: hasAnomaly ? anomalyType : null, // Include anomaly information
       anomalyStrength: hasAnomaly ? anomalyStrength : 0,
-      water: biome.water === true || height < waterLevel || riverValue > 0.2 || lakeValue > 0.2 || waterNetworkValue > 0.2,
+      water: !!biome.water,
       rarity: biome.rarity
     };
     
