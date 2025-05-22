@@ -58,9 +58,10 @@ export class Units {
    */
   static generateMonsterItemsInternal(monsterId, unitQty = 1) {
     const monster = Units.getUnit(monsterId, 'monster');
-    if (!monster) return [];
+    if (!monster) return {};
     
-    const items = [];
+    // Using object format with item codes as keys and quantities as values
+    const items = {};
     const itemCount = Math.min(Math.ceil(unitQty / 2), 3);
     
     for (let i = 0; i < itemCount; i++) {
@@ -84,25 +85,14 @@ export class Units {
         if (possibleItems && possibleItems.length > 0) {
           const itemTemplate = possibleItems[Math.floor(Math.random() * possibleItems.length)];
           
-          // Get the item definition from the shared ITEMS
-          const itemDefinition = ITEMS[itemTemplate.id] || {
-            name: itemTemplate.id,
-            type: 'unknown',
-            rarity: rarity
-          };
-          
           // Generate quantity within range
           const minQty = itemTemplate.quantityRange[0];
           const maxQty = itemTemplate.quantityRange[1];
           const quantity = Math.floor(Math.random() * (maxQty - minQty + 1)) + minQty;
           
-          items.push({
-            id: itemTemplate.id,
-            name: itemDefinition.name,
-            type: itemDefinition.type,
-            rarity: itemDefinition.rarity,
-            quantity
-          });
+          // Use the item code as the key and quantity as the value
+          const itemCode = itemTemplate.id.toUpperCase();
+          items[itemCode] = (items[itemCode] || 0) + quantity;
         }
       }
     }

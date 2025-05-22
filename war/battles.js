@@ -85,22 +85,33 @@ function calculateUnitPower(group) {
 function calculateItemPower(group) {
   if (!group || !group.items) return 0;
   
-  // Convert items to array if it's an object
-  const items = Array.isArray(group.items) ? group.items : Object.values(group.items);
-  
   let totalItemPower = 0;
   
-  // Process each item and sum up power contributions
-  items.forEach(item => {
-    if (item && item.id) {
-      // Get item power using helper function
-      const power = getItemPower(item.id);
+  // Handle the new format {item_code: quantity}
+  if (!Array.isArray(group.items) && typeof group.items === 'object') {
+    // New format - object with item codes as keys
+    Object.entries(group.items).forEach(([itemCode, quantity]) => {
+      if (!itemCode || typeof quantity !== 'number') return;
       
-      // Factor in quantity if available
-      const quantity = item.quantity || 1;
+      // Get item power using helper function
+      const power = getItemPower(itemCode);
       totalItemPower += power * quantity;
-    }
-  });
+    });
+  } else {
+    // Legacy format - array of item objects
+    const items = Array.isArray(group.items) ? group.items : Object.values(group.items);
+    
+    items.forEach(item => {
+      if (item && item.id) {
+        // Get item power using helper function
+        const power = getItemPower(item.id);
+        
+        // Factor in quantity if available
+        const quantity = item.quantity || 1;
+        totalItemPower += power * quantity;
+      }
+    });
+  }
   
   return totalItemPower;
 }
