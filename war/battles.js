@@ -208,13 +208,18 @@ export function calculateAttrition(sidePower, sideRatio, opposingRatio) {
  * @returns {Object} Modified side objects with PvP combat flags
  */
 export function processPvPCombat(side1, side2, tickCount) {
-  // Detect if sides contain player units
-  const side1Players = extractSoloPlayerUnits(side1);
-  const side2Players = extractSoloPlayerUnits(side2);
+  // CRITICAL FIX: Ensure sides are valid objects before processing
+  // This prevents errors when a battle has invalid or incomplete sides
+  const validSide1 = side1 || { groups: {} };
+  const validSide2 = side2 || { groups: {} };
+  
+  // Detect if sides contain player units with improved error handling
+  const side1Players = extractSoloPlayerUnits(validSide1);
+  const side2Players = extractSoloPlayerUnits(validSide2);
   
   // Skip if either side has no players
   if (side1Players.length === 0 || side2Players.length === 0) {
-    return { side1, side2 };
+    return { side1: validSide1, side2: validSide2 };
   }
   
   console.log(`PvP combat detected: ${side1Players.length} players vs ${side2Players.length} players`);
@@ -359,7 +364,7 @@ export function processPvPCombat(side1, side2, tickCount) {
     });
   }
   
-  return { side1, side2 };
+  return { side1: validSide1, side2: validSide2 };
 }
 
 /**
@@ -562,17 +567,129 @@ export function selectUnitsForCasualties(units, attritionCount) {
   return { unitsToRemove, playersKilled };
 }
 
+// Helper function to get critical hits from player units with enhanced info for multi-player PvP
+function getPvPCriticalHits(battle) {
+  const criticalHits = [];
+  
+  // CRITICAL FIX: Add safety checks for undefined battle sides
+  if (!battle || !battle.side1 || !battle.side2) {
+    return criticalHits;
+  }
+  
+  // Helper to find player name by ID
+  const findPlayerName = (sideObj, targetId) => {
+    // CRITICAL FIX: Add safety check for missing groups
+    if (!sideObj || !sideObj.groups) return null;
+    
+    for (const groupId in sideObj.groups) {
+      const group = sideObj.groups[groupId];
+      if (!group || !group.units) continue;
+      
+      for (const unitId in group.units) {
+        const unit = group.units[unitId];
+        if (unit.id === targetId && unit.type === 'player') {
+          return unit.displayName || "Unknown Player";
+        }
+      }
+    }
+    return null;
+  };
+  
+  // Check side 1
+  if (battle.side1 && battle.side1.groups) {
+    for (const groupId in battle.side1.groups) {
+      const group = battle.side1.groups[groupId];
+      if (group?.units) {
+        // Check each unit in the group
+        for (const unitId in group.units) {
+          const unit = group.units[unitId];
+          
+          // Only consider player units for critical hit tracking
+          if (unit.type === 'player' && unit.criticalHit) {
+            criticalHits.push({
+              playerId: unit.id,
+              displayName: unit.displayName || "Unknown Player",
+              targetId: unit.targetId,
+              combo: unit.comboCritical ? "Combo" : undefined,
+              isOutnumbered: unit.outnumbered === true,
+              criticalLevel: unit.level || 1, // Include unit level for scaling
+              basePower: UNITS[unit.unitType]?.power || 1 // Base power from unit type
+            });
+          }
+        }
+      }
+    }
+  }
+  
+  // Check side 2
+  if (battle.side2 && battle.side2.groups) {
+    for (const groupId in battle.side2.groups) {
+      const group = battle.side2.groups[groupId];
+      if (group?.units) {
+        // Check each unit in the group
+        for (const unitId in group.units) {
+          const unit = group.units[unitId];
+          
+          // Only consider player units for critical hit tracking
+          if (unit.type === 'player' && unit.criticalHit) {
+            criticalHits.push({
+              playerId: unit.id,
+              displayName: unit.displayName || "Unknown Player",
+              targetId: unit.targetId,
+              combo: unit.comboCritical ? "Combo" : undefined,
+              isOutnumbered: unit.outnumbered === true,
+              criticalLevel: unit.level || 1, // Include unit level for scaling
+              basePower: UNITS[unit.unitType]?.power || 1 // Base power from unit type
+            });
+          }
+        }
+      }
+    }
+  }
+  
+  return criticalHits;
+}
+
+// Helper function to check if any player in a side landed a critical hit
+function checkSideForCriticalHits(side) {
+  // CRITICAL FIX: Add safety check for undefined side or missing groups
+  if (!side || !side.groups) return false;
+  
+  for (const groupId in side.groups) {
+    const group = side.groups[groupId];
+    if (group?.units) {
+      // Check each unit in the group
+      for (const unitId in group.units) {
+        const unit = group.units[unitId];
+        if (unit.type === 'player' && unit.criticalHit) {
+          return true;
+        }
+      }
+    }
+  }
+  
+  return false;
+}
+
 // Helper function to extract solo player units from a side
 function extractSoloPlayerUnits(side) {
   const players = [];
   
+  // CRITICAL FIX: Return empty array if side is undefined or doesn't have groups property
+  if (!side || !side.groups) {
+    return players;
+  }
+  
   // Check each group in the side
-  for (const groupId in side.groups || {}) {
+  for (const groupId in side.groups) {
+    // CRITICAL FIX: Add safety check for invalid group
     const group = side.groups[groupId];
-    const unitIds = Object.keys(group?.units || {});
+    if (!group || !group.units) continue;
+    
+    const unitIds = Object.keys(group.units);
     
     // If this is a solo player group, add it to the list
-    if (unitIds.length === 1 && group.units[unitIds[0]].type === 'player') {
+    if (unitIds.length === 1 && group.units[unitIds[0]]?.type === 'player') {
       players.push({
         id: groupId,
         unitId: unitIds[0],
