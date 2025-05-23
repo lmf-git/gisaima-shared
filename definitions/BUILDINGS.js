@@ -73,7 +73,7 @@ export const BUILDINGS = {
     },
     
     // Add the new harbor building type
-    harbor: {
+    harbour: {
       name: "Harbor",
       description: "A port facility for constructing and launching water vessels. Higher levels enable more advanced ships.",
       icon: "⚓",
