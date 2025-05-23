@@ -511,13 +511,37 @@ export function selectUnitsForCasualties(units, attritionCount) {
     return { unitsToRemove, playersKilled };
   }
   
-  // NORMAL SOLO PLAYER: Standard protection for solo player vs monsters/environment
+  // NORMAL SOLO PLAYER: Modified protection for solo player vs monsters/environment
   if (isSoloPlayer) {
     // Fix for potential rounding errors in attrition - ensure 1.9+ rounds to 2
     const adjustedAttrition = Math.round(attritionCount * 10) / 10;
     
-    if (adjustedAttrition >= 2) {
-      // Only extremely high attrition can kill a lone player
+    // Calculate how much stronger the opposing side is based on attrition
+    // Attrition is roughly proportional to power difference
+    const powerDifferenceMultiplier = adjustedAttrition / 1.5;
+    
+    // MODIFIED: Only provide enhanced protection if opponent is no more than 50% stronger
+    // If power difference suggests opponent is more than 50% stronger, reduce protection
+    if (powerDifferenceMultiplier > 1.5) {
+      // Opponent is more than 50% stronger - player is more vulnerable
+      // Lower the threshold for player death when significantly outmatched
+      const deathThreshold = 1.3; // Lower than the normal threshold of 2
+      
+      if (adjustedAttrition >= deathThreshold) {
+        const playerUnit = units[unitIds[0]];
+        unitsToRemove.push(unitIds[0]);
+        
+        playersKilled.push({
+          playerId: playerUnit.id,
+          displayName: playerUnit.displayName || "Unknown Player"
+        });
+        
+        console.log(`Solo player killed - opponent too strong (${powerDifferenceMultiplier.toFixed(1)}x stronger, attrition: ${adjustedAttrition})`);
+      } else {
+        console.log(`Solo player survived against stronger opponent (${powerDifferenceMultiplier.toFixed(1)}x) - low attrition (${adjustedAttrition})`);
+      }
+    } else if (adjustedAttrition >= 2) {
+      // Standard case - only kill player with high attrition
       const playerUnit = units[unitIds[0]];
       unitsToRemove.push(unitIds[0]);
       
@@ -528,8 +552,8 @@ export function selectUnitsForCasualties(units, attritionCount) {
       
       console.log(`Solo player unit killed - required higher attrition threshold (${adjustedAttrition})`);
     } else {
-      // Player survives with less than 2 attrition
-      console.log(`Solo player unit survived due to extra protection (attrition: ${adjustedAttrition})`);
+      // Player survives with less than 2 attrition against opponent less than 50% stronger
+      console.log(`Solo player survived - opponent not significantly stronger (attrition: ${adjustedAttrition})`);
     }
     
     return { unitsToRemove, playersKilled };
